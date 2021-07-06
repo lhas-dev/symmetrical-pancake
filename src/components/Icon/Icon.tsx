@@ -24,7 +24,7 @@ export const Icon = ({ src }: IconProps) => {
 
   return (
     <Suspense fallback={<div />}>
-      <img src={path} alt="Icon" />
+      <img src={path} className={src} alt="Icon" />
     </Suspense>
   );
 };
