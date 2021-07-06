@@ -10,7 +10,7 @@ interface BreadcrumbProps {
   items: ItemProps[];
 }
 
-const Wrapper = styled.ul`
+export const Wrapper = styled.ul`
   margin: 0;
   padding: 0;
   display: flex;
@@ -37,6 +37,10 @@ const Link = styled.a`
   letter-spacing: 1.5px;
   text-decoration: none;
   color: #272727;
+
+  &:hover {
+    text-decoration: underline;
+  }
 `;
 
 export const Breadcrumb = ({ items }: BreadcrumbProps) => {

@@ -17,6 +17,11 @@ const Wrapper = styled.button`
   border: none;
   cursor: pointer;
   position: relative;
+  transition: all 0.1s ease-in;
+
+  &:hover {
+    opacity: 0.5;
+  }
 
   ${Badge} {
     position: absolute;
