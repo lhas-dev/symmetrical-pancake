@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { Icon } from "components/atoms/Icon/Icon";
 // import { useDevice } from "hooks/useDevice";
 
-// interface HeaderProps {}
+interface HeaderProps {}
 
 const Wrapper = styled.header`
   min-height: 56px;
@@ -10,7 +10,7 @@ const Wrapper = styled.header`
   border-bottom: 1px solid #ddd;
 `;
 
-export const Header = () => {
+export const Header = (_props: HeaderProps) => {
   // const device = useDevice();
   return (
     <Wrapper>
