@@ -5,7 +5,7 @@ interface IconProps {
 }
 
 export const Icon = ({ src }: IconProps) => {
-  const dynamicPath = () => import(`../../icons/${src}.svg`);
+  const dynamicPath = () => import(`../../../icons/${src}.svg`);
   const [path, setPath] = useState("");
 
   const onReady = async () => {

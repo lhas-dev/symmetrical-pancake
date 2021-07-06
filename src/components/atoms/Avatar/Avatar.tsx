@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useDevice } from "../../hooks/useDevice";
+import { useDevice } from "../../../hooks/useDevice";
 
 interface AvatarProps {
   src?: string;

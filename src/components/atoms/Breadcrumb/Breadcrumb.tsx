@@ -1,6 +1,6 @@
 import { Icon } from "../Icon/Icon";
 import styled from "styled-components";
-import { useDevice } from "../../hooks/useDevice";
+import { useDevice } from "../../../hooks/useDevice";
 
 interface ItemProps {
   label: string;
