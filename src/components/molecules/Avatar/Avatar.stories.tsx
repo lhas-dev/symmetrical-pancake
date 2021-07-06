@@ -3,7 +3,7 @@ import { ComponentStory, ComponentMeta } from "@storybook/react";
 import { Avatar } from "./Avatar";
 
 export default {
-  title: "Storybook/Avatar",
+  title: "Storybook/Molecules/Avatar",
   component: Avatar,
   argTypes: {
     src: { control: "text" },

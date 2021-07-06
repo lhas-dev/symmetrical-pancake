@@ -1,4 +1,4 @@
-import { Icon } from "../Icon/Icon";
+import { Icon } from "../../atoms/Icon/Icon";
 import styled from "styled-components";
 import { useDevice } from "../../../hooks/useDevice";
 

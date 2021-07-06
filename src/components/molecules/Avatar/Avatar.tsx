@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { useDevice } from "../../../hooks/useDevice";
+import { Badge } from "../../atoms/Badge/Badge";
 
 interface AvatarProps {
   src?: string;
@@ -16,6 +17,12 @@ const Wrapper = styled.button`
   border: none;
   cursor: pointer;
   position: relative;
+
+  ${Badge} {
+    position: absolute;
+    right: -1px;
+    top: -1px;
+  }
 `;
 
 const Image = styled.img`
@@ -27,17 +34,6 @@ const Image = styled.img`
     width: 36px;
     height: 36px;
   }
-`;
-
-const Badge = styled.span`
-  width: 8px;
-  height: 8px;
-  background: #e72176;
-  border-radius: 8px;
-  display: inline-block;
-  position: absolute;
-  right: -1px;
-  top: -1px;
 `;
 
 export const Avatar = ({ src, name, hasNotification }: AvatarProps) => {
