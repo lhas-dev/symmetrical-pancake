@@ -4,7 +4,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 | Statements                  | Branches                | Functions                 | Lines             |
 | --------------------------- | ----------------------- | ------------------------- | ----------------- |
-| ![Statements](https://img.shields.io/badge/statements-73.47%25-red.svg) | ![Branches](https://img.shields.io/badge/branches-53.33%25-red.svg) | ![Functions](https://img.shields.io/badge/functions-72.22%25-red.svg) | ![Lines](https://img.shields.io/badge/lines-73.81%25-red.svg) |
+| ![Statements](https://img.shields.io/badge/statements-100%25-brightgreen.svg) | ![Branches](https://img.shields.io/badge/branches-100%25-brightgreen.svg) | ![Functions](https://img.shields.io/badge/functions-100%25-brightgreen.svg) | ![Lines](https://img.shields.io/badge/lines-100%25-brightgreen.svg) |
 
 ## Available Scripts
 

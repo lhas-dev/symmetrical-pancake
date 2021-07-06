@@ -70,6 +70,8 @@
     "coverageReporters": ["text-summary", "json-summary", "lcov"],
     "collectCoverageFrom": [
       "src/**/*.{js,jsx,ts,tsx}",
+      "!src/index.tsx",
+      "!src/react-app-env.d.ts",
       "!<rootDir>/src/**/*.stories.{js,jsx,ts,tsx}",
       "!<rootDir>/node_modules/",
       "!<rootDir>/path/to/dir/"
