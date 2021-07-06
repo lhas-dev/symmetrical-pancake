@@ -1,0 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders Avatar with valid params on desktop devices 1`] = `undefined`;
+
+exports[`renders Avatar with valid params on mobile devices 1`] = `undefined`;
