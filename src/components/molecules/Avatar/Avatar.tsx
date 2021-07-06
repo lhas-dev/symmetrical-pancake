@@ -1,6 +1,6 @@
 import styled from "styled-components";
-import { useDevice } from "../../../hooks/useDevice";
-import { Badge } from "../../atoms/Badge/Badge";
+import { useDevice } from "hooks/useDevice";
+import { Badge } from "components/atoms/Badge/Badge";
 
 interface AvatarProps {
   src?: string;

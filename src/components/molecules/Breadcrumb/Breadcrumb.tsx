@@ -1,6 +1,6 @@
-import { Icon } from "../../atoms/Icon/Icon";
+import { Icon } from "components/atoms/Icon/Icon";
 import styled from "styled-components";
-import { useDevice } from "../../../hooks/useDevice";
+import { useDevice } from "hooks/useDevice";
 
 interface ItemProps {
   label: string;
