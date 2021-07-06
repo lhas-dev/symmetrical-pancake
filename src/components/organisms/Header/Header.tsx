@@ -1,11 +1,11 @@
 import styled from "styled-components";
-import { useDevice } from "../../../hooks/useDevice";
+// import { useDevice } from "../../../hooks/useDevice";
 
-interface HeaderProps {}
+// interface HeaderProps {}
 
 const Wrapper = styled.header``;
 
-export const Header = ({}: HeaderProps) => {
-  const device = useDevice();
+export const Header = () => {
+  // const device = useDevice();
   return <Wrapper>header</Wrapper>;
 };

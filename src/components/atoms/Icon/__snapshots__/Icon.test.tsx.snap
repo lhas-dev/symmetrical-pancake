@@ -1,0 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders Icon with invalid params 1`] = `undefined`;
+
+exports[`renders Icon with valid params 1`] = `undefined`;

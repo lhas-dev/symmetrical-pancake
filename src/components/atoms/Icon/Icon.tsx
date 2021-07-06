@@ -5,22 +5,22 @@ interface IconProps {
 }
 
 export const Icon = ({ src }: IconProps) => {
-  const dynamicPath = () => import(`../../../icons/${src}.svg`);
   const [path, setPath] = useState("");
 
-  const onReady = async () => {
-    try {
-      const response = await dynamicPath();
-
-      setPath(response.default);
-    } catch (e) {
-      setPath("");
-    }
-  };
-
   useEffect(() => {
+    const dynamicPath = () => import(`../../../icons/${src}.svg`);
+    const onReady = async () => {
+      try {
+        const response = await dynamicPath();
+  
+        setPath(response.default);
+      } catch (e) {
+        setPath("");
+      }
+    };
+    
     onReady();
-  }, [onReady]);
+  }, [src]);
 
   return (
     <Suspense fallback={<div />}>
