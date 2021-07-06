@@ -5,9 +5,9 @@ import {
   Wrapper as BreadcrumbWrapper,
 } from "components/molecules/Breadcrumb/Breadcrumb";
 import { Avatar } from "components/molecules/Avatar/Avatar";
-import { LogoutButton } from "components/atoms/Header/LogoutButton/LogoutButton";
-import { UserInfos } from "components/atoms/Header/UserInfos/UserInfos";
-import { NotificationButton } from "components/atoms/Header/NotificationButton/NotificationButton";
+import { LogoutButton } from "components/molecules/Header/LogoutButton/LogoutButton";
+import { UserInfos } from "components/molecules/Header/UserInfos/UserInfos";
+import { NotificationButton } from "components/molecules/Header/NotificationButton/NotificationButton";
 import { useDevice } from "hooks/useDevice";
 
 interface HeaderProps {}
