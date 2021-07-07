@@ -24,6 +24,7 @@ export const Square = styled.span`
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
 `;
 
 const Label = styled.p`
@@ -31,6 +32,7 @@ const Label = styled.p`
   font-size: 14px;
   line-height: 19px;
   font-family: "Open Sans";
+  text-align: left;
 `;
 
 interface CheckboxProps {

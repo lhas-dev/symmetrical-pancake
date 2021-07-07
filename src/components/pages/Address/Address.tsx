@@ -16,13 +16,12 @@ import { SuccessStateModal } from "components/templates/SuccessStateModal/Succes
 import { ErrorStateModal } from "components/templates/ErrorStateModal/ErrorStateModal";
 import { usePreviousValue } from "hooks/usePreviousValue";
 import isEqual from "lodash.isequal";
+import { ButtonGroup } from "components/atoms/ButtonGroup/ButtonGroup";
 
 const Wrapper = styled.main`
   background: #f5f5f5;
   min-height: calc(100vh - 56px);
   padding-top: 24px;
-  padding-left: 16px;
-  padding-right: 16px;
 
   ${Container} {
     flex-direction: column;
@@ -39,16 +38,8 @@ const InnerContainer = styled.div`
   align-self: flex-start;
 `;
 
-const ButtonGroup = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  gap: 16px;
-  margin-top: 32px;
-  margin-bottom: 32px;
-
-  button {
-    width: auto;
-  }
+const InnerContainerMargin = styled.div`
+  padding: 16px;
 `;
 
 const CEP_LENGTH = 9;
@@ -252,87 +243,97 @@ export const Address = () => {
             icon="QuestionIcon"
           />
           <InnerContainer>
-            <Card mt={[24, 24, 0]} mb={[16, 16, 32]}>
-              <CardBody display="flex" flexDirection="column" gridGap="20px">
-                <TextField
-                  label="Informe um CEP"
-                  placeholder="Digite aqui"
-                  loading={loading}
-                  icon="SearchIcon"
-                  onChange={handleCEP}
-                  mask="99999-999"
-                  innerRef={zipcodeRef}
-                  error={
-                    showZipcodeWarning
-                      ? "CEP inválido. Por favor, verifique."
-                      : ""
-                  }
-                />
-                {displayFields && (
-                  <>
-                    <SelectField
-                      label="Estado"
-                      options={states}
-                      value={state}
-                      onChange={(event) => setState(event.currentTarget.value)}
-                    />
-                    <SelectField
-                      label="Cidade"
-                      options={cities}
-                      value={city}
-                      onChange={(event) => setCity(event.currentTarget.value)}
-                    />
+            <InnerContainerMargin>
+                <Card mt={[24, 24, 0]} mb={[16, 16, 32]}>
+                  <CardBody display="flex" flexDirection="column" gridGap="20px">
                     <TextField
-                      label="Bairro"
+                      label="Informe um CEP"
                       placeholder="Digite aqui"
-                      value={neighbourhood}
-                      onChange={(event) =>
-                        setNeighbourhood(event.currentTarget.value)
+                      loading={loading}
+                      icon="SearchIcon"
+                      onChange={handleCEP}
+                      mask="99999-999"
+                      innerRef={zipcodeRef}
+                      error={
+                        showZipcodeWarning
+                          ? "CEP inválido. Por favor, verifique."
+                          : ""
                       }
                     />
-                    <TextField
-                      label="Rua / Avenida"
-                      placeholder="Digite aqui"
-                      value={address}
-                      onChange={(event) =>
-                        setAddress(event.currentTarget.value)
-                      }
-                    />
-                    <TextField
-                      label="Número"
-                      placeholder="Digite aqui"
-                      value={number}
-                      onChange={(event) => setNumber(event.currentTarget.value)}
-                    />
-                    <TextField
-                      label="Complemento"
-                      placeholder="Digite aqui"
-                      value={complement}
-                      onChange={(event) =>
-                        setComplement(event.currentTarget.value)
-                      }
-                    />
-                  </>
-                )}
-              </CardBody>
-              {!addManually && zipcode.length !== CEP_LENGTH && (
-                <>
-                  <CardDivider />
-                  <CardBody>
-                    <Button
-                      label="Adicionar manualmente"
-                      icon="AddMoreIcon"
-                      onClick={handleAddMore}
-                    />
+                    {displayFields && (
+                      <>
+                        <SelectField
+                          label="Estado"
+                          options={states}
+                          value={state}
+                          onChange={(event) =>
+                   
+                                setState(event.currentTarget.value)
+                        
+                        }
+                        />
+                        <SelectField
+                          label="Cidade"
+                          options={cities}
+                          value={city}
+                          onChange={(event) => setCity(event.currentTarget.value)}
+                        />
+                        <TextField
+                          label="Bairro"
+                          placeholder="Digite aqui"
+                          value={neighbourhood}
+                          onChange={(event) =>
+                            setNeighbourhood(event.currentTarget.value)
+                          }
+                        />
+                        <TextField
+                          label="Rua / Avenida"
+                          placeholder="Digite aqui"
+                          value={address}
+                          onChange={(event) =>
+                            setAddress(event.currentTarget.value)
+                          }
+                        />
+                        <TextField
+                          label="Número"
+                          placeholder="Digite aqui"
+                          value={number}
+                          onChange={(event) =>
+
+                                                   setNumber(event.currentTarget.value)
+                        
+                        }
+                        />
+                        <TextField
+                          label="Complemento"
+                          placeholder="Digite aqui"
+                          value={complement}
+                          onChange={(event) =>
+                            setComplement(event.currentTarget.value)
+                          }
+                        />
+                      </>
+                    )}
                   </CardBody>
-                </>
-              )}
-            </Card>
-            <Checkbox
-              label="Aceito compartilhar meu endereço com empresas parceiras"
-              value={agreement}
-              onChange={handleCheckbox}
-            />
+                  {!addManually && zipcode.length !== CEP_LENGTH && (
+                    <>
+                      <CardDivider />
+                      <CardBody>
+                        <Button
+                          label="Adicionar manualmente"
+                          icon="AddMoreIcon"
+                          onClick={handleAddMore}
+                        />
+                      </CardBody>
+                    </>
+                  )}
+                </Card>
+                <Checkbox
+                  label="Aceito compartilhar meu endereço com empresas parceiras"
+                  value={agreement}
+                  onChange={handleCheckbox}
+                />
+            </InnerContainerMargin>
             <ButtonGroup>
               <ContainedButton
                 label="Salvar"

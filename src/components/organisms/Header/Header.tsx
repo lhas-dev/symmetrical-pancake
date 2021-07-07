@@ -20,6 +20,8 @@ const Wrapper = styled.header`
   background: #ffffff;
   border-bottom: 1px solid #ddd;
   display: flex;
+  position: sticky;
+  top: 0;
 
   ${Container} {
     align-items: center;
