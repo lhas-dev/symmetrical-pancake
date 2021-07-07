@@ -1,4 +1,4 @@
-import { Card, CardBody } from "components/atoms/Card/Card";
+import { Card, CardBody, CardDivider } from "components/atoms/Card/Card";
 import { PageTitle } from "components/molecules/PageTitle/PageTitle";
 import { TextField } from "components/molecules/TextField/TextField";
 import { Header } from "components/organisms/Header/Header";
@@ -30,6 +30,8 @@ export const Address = () => {
               icon="SearchIcon"
             />
           </CardBody>
+          <CardDivider />
+          <CardBody>botão aqui</CardBody>
         </Card>
       </Wrapper>
     </>

@@ -13,8 +13,15 @@ const CardBodyWrapper = styled.div`
   padding: 24px;
 `;
 
+const CardDividerWrapper = styled.span`
+  width: 100%;
+  height: 1px;
+  background: #ddd;
+  display: block;
+`;
+
 interface CardProps extends SpaceProps {
-  children: React.ReactNode;
+  children?: React.ReactNode;
 }
 
 export const Card = ({ children, ...space }: CardProps) => (
@@ -23,4 +30,8 @@ export const Card = ({ children, ...space }: CardProps) => (
 
 export const CardBody = ({ children }: CardProps) => (
   <CardBodyWrapper>{children}</CardBodyWrapper>
+);
+
+export const CardDivider = ({ children }: CardProps) => (
+  <CardDividerWrapper>{children}</CardDividerWrapper>
 );
