@@ -22,6 +22,7 @@ const Wrapper = styled.header`
   display: flex;
   position: sticky;
   top: 0;
+  z-index: 998;
 
   ${Container} {
     align-items: center;
