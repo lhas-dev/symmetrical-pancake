@@ -31,9 +31,9 @@ interface ButtonProps extends React.HTMLProps<HTMLButtonElement> {
   icon?: string;
 }
 
-export const Button = ({ label, icon }: ButtonProps) => {
+export const Button = ({ label, icon, onClick }: ButtonProps) => {
   return (
-    <Wrapper>
+    <Wrapper onClick={onClick}>
       {icon && <Icon src={icon} />}
       {label}
     </Wrapper>

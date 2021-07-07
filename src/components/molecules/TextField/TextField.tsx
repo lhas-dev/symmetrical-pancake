@@ -108,6 +108,7 @@ export const TextField = ({
   mask,
   onFocus,
   onBlur,
+  onChange,
 }: TextFieldProps) => {
   const [focused, setFocused] = useState(false);
   const Element = mask ? InputMask : "input";
@@ -129,6 +130,12 @@ export const TextField = ({
     }
   };
 
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (onChange) {
+      onChange(event);
+    }
+  };
+
   return (
     <Wrapper>
       <TextFieldWrapper focused={focused}>
@@ -138,6 +145,7 @@ export const TextField = ({
           onBlur={handleBlur}
           placeholder={placeholder}
           type={type}
+          onChange={handleChange}
           {...maskProps}
         />
         {icon && !loading && <Icon src={icon} />}

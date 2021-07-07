@@ -1,5 +1,14 @@
 import styled from "styled-components";
-import { space, SpaceProps, layout, LayoutProps } from "styled-system";
+import {
+  space,
+  SpaceProps,
+  layout,
+  LayoutProps,
+  flexbox,
+  FlexboxProps,
+  grid,
+  GridProps,
+} from "styled-system";
 
 export const Wrapper = styled.article`
   background: #ffffff;
@@ -10,10 +19,17 @@ export const Wrapper = styled.article`
 
   ${space}
   ${layout}
+  ${flexbox}
+  ${grid}
 `;
 
 const CardBodyWrapper = styled.div`
   padding: 24px;
+
+  ${space}
+  ${layout}
+  ${flexbox}
+  ${grid}
 `;
 
 const CardDividerWrapper = styled.span`
@@ -23,7 +39,7 @@ const CardDividerWrapper = styled.span`
   display: block;
 `;
 
-interface CardProps extends SpaceProps, LayoutProps {
+interface CardProps extends SpaceProps, LayoutProps, FlexboxProps, GridProps {
   children?: React.ReactNode;
 }
 
@@ -31,8 +47,8 @@ export const Card = ({ children, ...rest }: CardProps) => (
   <Wrapper {...rest}>{children}</Wrapper>
 );
 
-export const CardBody = ({ children }: CardProps) => (
-  <CardBodyWrapper>{children}</CardBodyWrapper>
+export const CardBody = ({ children, ...rest }: CardProps) => (
+  <CardBodyWrapper {...rest}>{children}</CardBodyWrapper>
 );
 
 export const CardDivider = ({ children }: CardProps) => (

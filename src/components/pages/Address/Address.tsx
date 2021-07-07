@@ -7,6 +7,7 @@ import { TextField } from "components/molecules/TextField/TextField";
 import { Header } from "components/organisms/Header/Header";
 import { useState } from "react";
 import styled from "styled-components";
+import { SelectField } from "components/molecules/SelectField/SelectField";
 
 const Wrapper = styled.main`
   background: #f5f5f5;
@@ -31,10 +32,27 @@ const InnerContainer = styled.div`
 `;
 
 export const Address = () => {
+  const [displayFields, setDisplayFields] = useState(false);
+  const [addManually, setAddManually] = useState(false);
   const [agreement, setAgreement] = useState(false);
 
   const handleCheckbox = () => {
     setAgreement(!agreement);
+  };
+  const handleAddMore = () => {
+    setAddManually(true);
+    setDisplayFields(true);
+  };
+  const handleCEP = (event: any) => {
+    const value = event.target.value;
+    const CEP_LENGTH = 9;
+    const isValid = value.length === CEP_LENGTH;
+
+    if (!isValid) {
+      return false;
+    }
+
+    console.log(value);
   };
   return (
     <>
@@ -49,17 +67,40 @@ export const Address = () => {
           />
           <InnerContainer>
             <Card mt={[24, 24, 0]} mb={16}>
-              <CardBody>
+              <CardBody display="flex" flexDirection="column" gridGap="20px">
                 <TextField
                   label="Informe um CEP"
                   placeholder="Digite aqui"
                   icon="SearchIcon"
+                  onChange={handleCEP}
+                  mask="99999-999"
                 />
+                {displayFields && (
+                  <>
+                    <SelectField label="Estado" options={[]} />
+                    <SelectField label="Cidade" options={[]} />
+                    <TextField label="Bairro" placeholder="Digite aqui" />
+                    <TextField
+                      label="Rua / Avenida"
+                      placeholder="Digite aqui"
+                    />
+                    <TextField label="Número" placeholder="Digite aqui" />
+                    <TextField label="Complemento" placeholder="Digite aqui" />
+                  </>
+                )}
               </CardBody>
-              <CardDivider />
-              <CardBody>
-                <Button label="Adicionar manualmente" icon="AddMoreIcon" />
-              </CardBody>
+              {!addManually && (
+                <>
+                  <CardDivider />
+                  <CardBody>
+                    <Button
+                      label="Adicionar manualmente"
+                      icon="AddMoreIcon"
+                      onClick={handleAddMore}
+                    />
+                  </CardBody>
+                </>
+              )}
             </Card>
             <Checkbox
               label="Aceito compartilhar meu endereço com empresas parceiras"
