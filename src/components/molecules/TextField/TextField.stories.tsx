@@ -28,3 +28,15 @@ Default.args = {
   loading: false,
   error: "",
 };
+
+
+export const Masked = Template.bind({});
+Masked.args = {
+  label: "Informe um CEP",
+  placeholder: "Digite aqui",
+  type: "text",
+  icon: "SearchIcon",
+  loading: false,
+  mask: "99999-999",
+  error: "",
+};

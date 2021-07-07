@@ -66,10 +66,10 @@ export const ContainedButton = ({
   label,
   icon,
   variant = "secondary",
-  ...rest
+  onClick,
 }: ContainedButtonProps) => {
   return (
-    <Wrapper variant={variant} {...rest}>
+    <Wrapper onClick={onClick} variant={variant}>
       {icon && <Icon src={icon} />}
       {label}
     </Wrapper>

@@ -1,6 +1,7 @@
-import { FocusEventHandler, useState } from "react";
+import { useState } from "react";
 import { Icon } from "components/atoms/Icon/Icon";
 import styled, { css } from "styled-components";
+import InputMask from "react-input-mask";
 import LoadingIcon from "icons/LoadingIcon.gif";
 interface TextFieldWrapperProps {
   focused?: boolean;
@@ -93,6 +94,7 @@ interface TextFieldProps extends React.HTMLProps<HTMLInputElement> {
   icon?: string;
   loading?: boolean;
   error?: string;
+  mask?: string;
 }
 
 export const TextField = ({
@@ -102,11 +104,13 @@ export const TextField = ({
   icon,
   loading,
   error,
+  mask,
   onFocus,
   onBlur,
-  ...rest
 }: TextFieldProps) => {
   const [focused, setFocused] = useState(false);
+  const Element = mask ? InputMask : "input";
+  const maskProps = mask ? { mask, maskPlaceholder: null } : { mask: "" };
 
   const handleFocus = (event: React.FocusEvent<HTMLInputElement>) => {
     setFocused(true);
@@ -128,12 +132,12 @@ export const TextField = ({
     <Wrapper>
       <TextFieldWrapper focused={focused}>
         {label && <label>{label}</label>}
-        <input
+        <Element
           onFocus={handleFocus}
           onBlur={handleBlur}
           placeholder={placeholder}
           type={type}
-          {...rest}
+          {...maskProps}
         />
         {icon && !loading && <Icon src={icon} />}
         {loading && <img alt="Loading" className="loading" src={LoadingIcon} />}
