@@ -154,6 +154,10 @@ export const Address = () => {
         (item: any) => item.nome === zipcodeData.localidade
       );
 
+      if (!city) {
+        return;
+      }
+
       setCity(city.id);
     };
 
