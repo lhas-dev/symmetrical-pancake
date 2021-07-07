@@ -14,7 +14,6 @@ import { Container } from "components/atoms/Container/Container";
 interface HeaderProps {}
 
 const Wrapper = styled.header`
-  width: 100%;
   min-height: 56px;
   padding-left: 16px;
   padding-right: 16px;

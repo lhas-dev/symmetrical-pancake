@@ -12,9 +12,8 @@ import { Header } from "components/organisms/Header/Header";
 import styled from "styled-components";
 
 const Wrapper = styled.main`
-  width: 100%;
   background: #f5f5f5;
-  min-height: 100vh;
+  min-height: calc(100vh - 56px);
   padding-top: 24px;
   padding-left: 16px;
   padding-right: 16px;
@@ -26,7 +25,7 @@ const Wrapper = styled.main`
   ${Container} {
     flex-direction: column;
 
-    @media (min-width: 992px) {
+    @media (min-width: 52em) {
       flex-direction: row;
       gap: 50px;
     }

@@ -9,7 +9,11 @@ const Wrapper = styled.button`
   margin-right: 20px;
   cursor: pointer;
   transition: all 0.1s ease-in;
-  display: inline-flex;
+  display: none;
+
+  @media (min-width: 52em) {
+    display: inline-flex;
+  }
 
   &:hover {
     opacity: 0.5;

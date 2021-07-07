@@ -2,7 +2,6 @@ import { Icon } from "components/atoms/Icon/Icon";
 import styled from "styled-components";
 
 const Wrapper = styled.button`
-  display: flex;
   background: transparent;
   border: none;
   align-items: center;
@@ -10,6 +9,11 @@ const Wrapper = styled.button`
   margin-left: 15px;
   padding: 0;
   transition: all 0.1s ease-in;
+  display: none;
+
+  @media (min-width: 52em) {
+    display: flex;
+  }
 
   &:hover {
     opacity: 0.5;

@@ -6,6 +6,11 @@ const Wrapper = styled.div`
   padding-right: 15px;
   font-family: "Open Sans";
   margin-left: 14px;
+  display: none;
+
+  @media (min-width: 52em) {
+    display: block;
+  }
 
   h2 {
     font-size: 18px;
