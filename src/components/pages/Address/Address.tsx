@@ -5,10 +5,12 @@ import {
   CardDivider,
   Wrapper as CardWrapper,
 } from "components/atoms/Card/Card";
+import { Checkbox } from "components/atoms/Checkbox/Checkbox";
 import { Container } from "components/atoms/Container/Container";
 import { PageTitle } from "components/molecules/PageTitle/PageTitle";
 import { TextField } from "components/molecules/TextField/TextField";
 import { Header } from "components/organisms/Header/Header";
+import { useState } from "react";
 import styled from "styled-components";
 
 const Wrapper = styled.main`
@@ -17,10 +19,6 @@ const Wrapper = styled.main`
   padding-top: 24px;
   padding-left: 16px;
   padding-right: 16px;
-
-  ${CardWrapper} {
-    align-self: flex-start;
-  }
 
   ${Container} {
     flex-direction: column;
@@ -32,7 +30,17 @@ const Wrapper = styled.main`
   }
 `;
 
+const InnerContainer = styled.div`
+width: 100%;
+  align-self: flex-start;
+`;
+
 export const Address = () => {
+  const [agreement, setAgreement] = useState(false);
+
+  const handleCheckbox = () => {
+    setAgreement(true);
+  };
   return (
     <>
       <Header />
@@ -44,19 +52,22 @@ export const Address = () => {
             description="Informe um CEP válido para buscarmos seu endereço, ou adicione-o manualmente."
             icon="QuestionIcon"
           />
-          <Card mt={[24, 24, 0]} mb={16}>
-            <CardBody>
-              <TextField
-                label="Informe um CEP"
-                placeholder="Digite aqui"
-                icon="SearchIcon"
-              />
-            </CardBody>
-            <CardDivider />
-            <CardBody>
-              <Button label="Adicionar manualmente" icon="AddMoreIcon" />
-            </CardBody>
-          </Card>
+          <InnerContainer>
+              <Card mt={[24, 24, 0]} mb={16}>
+                <CardBody>
+                  <TextField
+                    label="Informe um CEP"
+                    placeholder="Digite aqui"
+                    icon="SearchIcon"
+                  />
+                </CardBody>
+                <CardDivider />
+                <CardBody>
+                  <Button label="Adicionar manualmente" icon="AddMoreIcon" />
+                </CardBody>
+              </Card>
+              <Checkbox label="Aceito compartilhar meu endereço com empresas parceiras" value={agreement} onChange={handleCheckbox} />
+          </InnerContainer>
         </Container>
       </Wrapper>
     </>
