@@ -2,20 +2,19 @@ import { useState } from "react";
 import { Icon } from "components/atoms/Icon/Icon";
 import styled, { css } from "styled-components";
 import LoadingIcon from "icons/LoadingIcon.gif";
-
-interface WrapperProps {
+interface TextFieldWrapperProps {
   focused?: boolean;
-  loading?: boolean;
 }
 
-const Wrapper = styled.div<WrapperProps>`
+const Wrapper = styled.div``;
+
+const TextFieldWrapper = styled.div<TextFieldWrapperProps>`
   background: #f5f5f5;
   border-radius: 7px 7px 0px 0px;
   border-bottom: 1px solid #ddd;
   position: relative;
   overflow: hidden;
   min-height: 70px;
-  margin-bottom: 24px;
   transition: all 0.1s ease-in;
 
   ${({ focused }) =>
@@ -59,6 +58,7 @@ const Wrapper = styled.div<WrapperProps>`
     font-family: "Open Sans";
     font-size: 18px;
     color: #272727;
+    z-index: 2;
 
     &::placeholder {
       font-weight: 400;
@@ -68,12 +68,31 @@ const Wrapper = styled.div<WrapperProps>`
   }
 `;
 
+const Error = styled.p`
+  color: #e72176;
+  font-size: 14px;
+  line-height: 19px;
+  font-family: "Open Sans";
+  font-weight: normal;
+  margin: 0;
+  margin-left: 7px;
+  margin-top: 7px;
+  margin-bottom: 7px;
+  display: inline-flex;
+  align-items: center;
+
+  img {
+    margin-right: 7px;
+  }
+`;
+
 interface TextFieldProps {
   label?: string;
   placeholder?: string;
   type?: string;
   icon?: string;
   loading?: boolean;
+  error?: string;
 }
 
 export const TextField = ({
@@ -82,6 +101,7 @@ export const TextField = ({
   type = "text",
   icon,
   loading,
+  error,
 }: TextFieldProps) => {
   const [focused, setFocused] = useState(false);
 
@@ -94,16 +114,24 @@ export const TextField = ({
   };
 
   return (
-    <Wrapper focused={focused} loading={loading}>
-      {label && <label>{label}</label>}
-      <input
-        onFocus={handleFocus}
-        onBlur={handleBlur}
-        placeholder={placeholder}
-        type={type}
-      />
-      {icon && !loading && <Icon src={icon} />}
-      {loading && <img alt="Loading" className="loading" src={LoadingIcon} />}
+    <Wrapper>
+      <TextFieldWrapper focused={focused}>
+        {label && <label>{label}</label>}
+        <input
+          onFocus={handleFocus}
+          onBlur={handleBlur}
+          placeholder={placeholder}
+          type={type}
+        />
+        {icon && !loading && <Icon src={icon} />}
+        {loading && <img alt="Loading" className="loading" src={LoadingIcon} />}
+      </TextFieldWrapper>
+      {error && (
+        <Error>
+          <Icon src="WarningIcon" />
+          {error}
+        </Error>
+      )}
     </Wrapper>
   );
 };

@@ -11,6 +11,7 @@ export default {
     type: "text",
     icon: "text",
     loading: "boolean",
+    error: "text",
   },
 } as ComponentMeta<typeof TextField>;
 
@@ -25,4 +26,5 @@ Default.args = {
   type: "text",
   icon: "SearchIcon",
   loading: false,
+  error: "",
 };
