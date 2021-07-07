@@ -36,7 +36,7 @@ const Wrapper = styled.div`
 
 interface SuccessStateModalProps {
   visible: boolean;
-  onClose: () => {};
+  onClose: () => any;
 }
 
 export const SuccessStateModal = ({

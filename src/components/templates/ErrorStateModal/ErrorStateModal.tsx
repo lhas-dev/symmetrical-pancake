@@ -36,7 +36,7 @@ const Wrapper = styled.div`
 
 interface ErrorStateModalProps {
   visible: boolean;
-  onClose: () => {};
+  onClose: () => any;
 }
 
 export const ErrorStateModal = ({ visible, onClose }: ErrorStateModalProps) => {

@@ -12,6 +12,10 @@ import ZipcodeService from "services/ZipcodeService";
 import StatesService from "services/StatesService";
 import CitiesService from "services/CitiesService";
 import { ContainedButton } from "components/atoms/ContainedButton/ContainedButton";
+import { SuccessStateModal } from "components/templates/SuccessStateModal/SuccessStateModal";
+import { ErrorStateModal } from "components/templates/ErrorStateModal/ErrorStateModal";
+import { usePreviousValue } from "hooks/usePreviousValue";
+import isEqual from "lodash.isequal";
 
 const Wrapper = styled.main`
   background: #f5f5f5;
@@ -67,6 +71,7 @@ export const Address = () => {
     uf: "",
     localidade: "",
   });
+  const previousZipcodeData = usePreviousValue(zipcodeData);
   const zipcodeRef = useRef<HTMLInputElement>();
 
   // Select fields
@@ -80,6 +85,10 @@ export const Address = () => {
   const [neighbourhood, setNeighbourhood] = useState("");
   const [number, setNumber] = useState("");
   const [complement, setComplement] = useState("");
+
+  // Modal
+  const [showModal, setShowModal] = useState(false);
+  const [modalState, setModalState] = useState("");
 
   const handleCheckbox = () => {
     setAgreement(!agreement);
@@ -178,10 +187,12 @@ export const Address = () => {
 
   useEffect(() => {
     const cb = async () => {
+      
       const stateObject: any = states.find((item: any) => item.value === state);
       const ufId = stateObject?.id;
+      const isNotValid = !isEqual(previousZipcodeData, zipcodeData) || !ufId || states.length === 0;
 
-      if (!ufId || states.length === 0) {
+      if (isNotValid) {
         return;
       }
 
@@ -193,9 +204,11 @@ export const Address = () => {
       }));
       setCities(formattedCities);
 
+
       const city = request.find(
         (item: any) => item.nome === zipcodeData.localidade
       );
+    
 
       if (!city) {
         return;
@@ -205,14 +218,31 @@ export const Address = () => {
     };
 
     cb();
-  }, [state, states, zipcodeData.localidade]);
+  }, [previousZipcodeData, state, states, zipcodeData]);
 
   const isFormValid =
     zipcode.length === 9 && state && city && address && number;
 
+  const handleSubmit = () => {
+    setShowModal(true);
+    setModalState(agreement ? "success" : "error");
+  };
+
+  const handleModalClose = () => {
+    setShowModal(false);
+  };
+
   return (
     <>
       <Header />
+      <SuccessStateModal
+        visible={showModal && modalState === "success"}
+        onClose={handleModalClose}
+      />
+      <ErrorStateModal
+        visible={showModal && modalState === "error"}
+        onClose={handleModalClose}
+      />
       <Wrapper>
         <Container>
           <PageTitle
@@ -268,16 +298,20 @@ export const Address = () => {
                         setAddress(event.currentTarget.value)
                       }
                     />
-                    <TextField label="Número" placeholder="Digite aqui"
+                    <TextField
+                      label="Número"
+                      placeholder="Digite aqui"
                       value={number}
-                      onChange={(event) =>
-                        setNumber(event.currentTarget.value)
-                      } />
-                    <TextField label="Complemento" placeholder="Digite aqui" 
+                      onChange={(event) => setNumber(event.currentTarget.value)}
+                    />
+                    <TextField
+                      label="Complemento"
+                      placeholder="Digite aqui"
                       value={complement}
                       onChange={(event) =>
                         setComplement(event.currentTarget.value)
-                      } />
+                      }
+                    />
                   </>
                 )}
               </CardBody>
@@ -304,6 +338,7 @@ export const Address = () => {
                 label="Salvar"
                 variant="primary"
                 disabled={!isFormValid}
+                onClick={handleSubmit}
               />
               <ContainedButton label="Cancelar" onClick={handleCancel} />
             </ButtonGroup>
