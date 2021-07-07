@@ -1,16 +1,15 @@
 import { useState } from "react";
 import { Icon } from "components/atoms/Icon/Icon";
 import styled, { css } from "styled-components";
-import InputMask from "react-input-mask";
 import LoadingIcon from "icons/LoadingIcon.gif";
 
-interface TextFieldWrapperProps {
+interface SelectFieldWrapperProps {
   focused?: boolean;
 }
 
 const Wrapper = styled.div``;
 
-const TextFieldWrapper = styled.div<TextFieldWrapperProps>`
+const SelectFieldWrapper = styled.div<SelectFieldWrapperProps>`
   background: #f5f5f5;
   border-radius: 7px 7px 0px 0px;
   border-bottom: 1px solid #ddd;
@@ -43,24 +42,25 @@ const TextFieldWrapper = styled.div<TextFieldWrapperProps>`
     right: 14px;
     top: 50%;
     margin-top: -6px;
-    height: 21px;
+    width: 21px;
   }
 
-  input {
+  select {
     position: absolute;
     left: 0;
     top: 0;
-    width: 100%;
+    width: 110%;
     height: 100%;
     background: transparent;
     border: none;
     outline: none;
-    padding-left: 14px;
+    padding-left: 10px;
     padding-top: 10px;
     font-family: "Open Sans";
     font-size: 18px;
     color: #272727;
     z-index: 2;
+    cursor: pointer;
 
     &::placeholder {
       font-weight: 400;
@@ -88,32 +88,28 @@ const Error = styled.p`
   }
 `;
 
-interface TextFieldProps extends React.HTMLProps<HTMLInputElement> {
+interface SelectFieldProps extends React.HTMLProps<HTMLSelectElement> {
   label?: string;
   placeholder?: string;
-  type?: string;
   icon?: string;
   loading?: boolean;
   error?: string;
-  mask?: string;
+  options: { label: string | number; value: string | number }[];
 }
 
-export const TextField = ({
+export const SelectField = ({
   label,
   placeholder,
-  type = "text",
-  icon,
+  icon = "ArrowDownIcon",
   loading,
   error,
-  mask,
+  options,
   onFocus,
   onBlur,
-}: TextFieldProps) => {
+}: SelectFieldProps) => {
   const [focused, setFocused] = useState(false);
-  const Element = mask ? InputMask : "input";
-  const maskProps = mask ? { mask, maskPlaceholder: null } : { mask: "" };
 
-  const handleFocus = (event: React.FocusEvent<HTMLInputElement>) => {
+  const handleFocus = (event: React.FocusEvent<HTMLSelectElement>) => {
     setFocused(true);
 
     if (onFocus) {
@@ -121,7 +117,7 @@ export const TextField = ({
     }
   };
 
-  const handleBlur = (event: React.FocusEvent<HTMLInputElement>) => {
+  const handleBlur = (event: React.FocusEvent<HTMLSelectElement>) => {
     setFocused(false);
 
     if (onBlur) {
@@ -131,18 +127,22 @@ export const TextField = ({
 
   return (
     <Wrapper>
-      <TextFieldWrapper focused={focused}>
+      <SelectFieldWrapper focused={focused}>
         {label && <label>{label}</label>}
-        <Element
+        <select
           onFocus={handleFocus}
           onBlur={handleBlur}
           placeholder={placeholder}
-          type={type}
-          {...maskProps}
-        />
+        >
+          {options.map(({ value, label }) => (
+            <option key={value} value={value}>
+              {label}
+            </option>
+          ))}
+        </select>
         {icon && !loading && <Icon src={icon} />}
         {loading && <img alt="Loading" className="loading" src={LoadingIcon} />}
-      </TextFieldWrapper>
+      </SelectFieldWrapper>
       {error && (
         <Error>
           <Icon src="WarningIcon" />

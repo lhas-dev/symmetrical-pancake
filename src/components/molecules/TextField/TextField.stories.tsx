@@ -9,6 +9,7 @@ export default {
     label: { control: "text" },
     placeholder: { control: "text" },
     type: { control: "text" },
+    mask: { control: "text" },
     icon: { control: "text" },
     loading: { control: "boolean" },
     error: { control: "text" },
