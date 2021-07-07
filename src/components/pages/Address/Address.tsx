@@ -8,6 +8,7 @@ import { Header } from "components/organisms/Header/Header";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { SelectField } from "components/molecules/SelectField/SelectField";
+import ZipcodeService from "services/ZipcodeService";
 
 const Wrapper = styled.main`
   background: #f5f5f5;
@@ -34,10 +35,22 @@ const InnerContainer = styled.div`
 const CEP_LENGTH = 9;
 
 export const Address = () => {
+  // Flags
   const [displayFields, setDisplayFields] = useState(false);
   const [addManually, setAddManually] = useState(false);
   const [agreement, setAgreement] = useState(false);
+
+  // Loading
+  const [loading, setLoading] = useState(false);
+
+  // Zipcode
   const [zipcode, setZipcode] = useState("");
+  const [showZipcodeWarning, setShowZipcodeWarning] = useState(false);
+  const [zipcodeData, setZipcodeData] = useState({});
+
+  // Address fields
+  const [address, setAddress] = useState("");
+  const [neighbourhood, setNeighbourhood] = useState("");
 
   const handleCheckbox = () => {
     setAgreement(!agreement);
@@ -59,12 +72,27 @@ export const Address = () => {
 
   useEffect(() => {
     const isValid = zipcode.length === CEP_LENGTH;
+    const cb = async () => {
+      setLoading(true);
+      const data = await ZipcodeService.get(zipcode);
+      console.log(data);
+      setLoading(false);
+      setShowZipcodeWarning(data.erro ? true : false);
+
+      if (!data.erro) {
+        setZipcodeData(data);
+        setAddress(data.logradouro);
+        setNeighbourhood(data.bairro);
+      }
+    };
 
     if (isValid) {
       setDisplayFields(true);
+
+      cb();
     }
   }, [zipcode]);
-  
+
   return (
     <>
       <Header />
@@ -82,18 +110,35 @@ export const Address = () => {
                 <TextField
                   label="Informe um CEP"
                   placeholder="Digite aqui"
+                  loading={loading}
                   icon="SearchIcon"
                   onChange={handleCEP}
                   mask="99999-999"
+                  error={
+                    showZipcodeWarning
+                      ? "CEP inválido. Por favor, verifique."
+                      : ""
+                  }
                 />
                 {displayFields && (
                   <>
                     <SelectField label="Estado" options={[]} />
                     <SelectField label="Cidade" options={[]} />
-                    <TextField label="Bairro" placeholder="Digite aqui" />
+                    <TextField
+                      label="Bairro"
+                      placeholder="Digite aqui"
+                      value={neighbourhood}
+                      onChange={(event) =>
+                        setNeighbourhood(event.currentTarget.value)
+                      }
+                    />
                     <TextField
                       label="Rua / Avenida"
                       placeholder="Digite aqui"
+                      value={address}
+                      onChange={(event) =>
+                        setAddress(event.currentTarget.value)
+                      }
                     />
                     <TextField label="Número" placeholder="Digite aqui" />
                     <TextField label="Complemento" placeholder="Digite aqui" />

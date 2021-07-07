@@ -106,6 +106,7 @@ export const TextField = ({
   loading,
   error,
   mask,
+  value,
   onFocus,
   onBlur,
   onChange,
@@ -146,6 +147,7 @@ export const TextField = ({
           placeholder={placeholder}
           type={type}
           onChange={handleChange}
+          value={value}
           {...maskProps}
         />
         {icon && !loading && <Icon src={icon} />}
