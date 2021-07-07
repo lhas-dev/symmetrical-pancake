@@ -16,6 +16,7 @@ import { SuccessStateModal } from "components/templates/SuccessStateModal/Succes
 import { ErrorStateModal } from "components/templates/ErrorStateModal/ErrorStateModal";
 import { usePreviousValue } from "hooks/usePreviousValue";
 import isEqual from "lodash.isequal";
+import orderBy from "lodash.orderby";
 import { ButtonGroup } from "components/atoms/ButtonGroup/ButtonGroup";
 
 const Wrapper = styled.main`
@@ -169,8 +170,9 @@ export const Address = () => {
         label: uf.nome,
         value: uf.sigla,
       }));
+      const orderedStates: any = orderBy(formattedStates, ["label"], ["asc"]);
 
-      setStates(formattedStates);
+      setStates(orderedStates);
     };
 
     cb();

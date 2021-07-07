@@ -10,6 +10,7 @@ export const ButtonGroup = styled.div`
   gap: 8px;
   position: sticky;
   bottom: 0;
+  z-index: 998;
 
   @media (min-width: 50em) {
     background: transparent;
