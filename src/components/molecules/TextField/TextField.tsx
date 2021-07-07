@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { FocusEventHandler, useState } from "react";
 import { Icon } from "components/atoms/Icon/Icon";
 import styled, { css } from "styled-components";
 import LoadingIcon from "icons/LoadingIcon.gif";
@@ -86,7 +86,7 @@ const Error = styled.p`
   }
 `;
 
-interface TextFieldProps {
+interface TextFieldProps extends React.HTMLProps<HTMLInputElement> {
   label?: string;
   placeholder?: string;
   type?: string;
@@ -102,15 +102,26 @@ export const TextField = ({
   icon,
   loading,
   error,
+  onFocus,
+  onBlur,
+  ...rest
 }: TextFieldProps) => {
   const [focused, setFocused] = useState(false);
 
-  const handleFocus = () => {
+  const handleFocus = (event: React.FocusEvent<HTMLInputElement>) => {
     setFocused(true);
+
+    if (onFocus) {
+      onFocus(event);
+    }
   };
 
-  const handleBlur = () => {
+  const handleBlur = (event: React.FocusEvent<HTMLInputElement>) => {
     setFocused(false);
+
+    if (onBlur) {
+      onBlur(event);
+    }
   };
 
   return (
@@ -122,6 +133,7 @@ export const TextField = ({
           onBlur={handleBlur}
           placeholder={placeholder}
           type={type}
+          {...rest}
         />
         {icon && !loading && <Icon src={icon} />}
         {loading && <img alt="Loading" className="loading" src={LoadingIcon} />}
