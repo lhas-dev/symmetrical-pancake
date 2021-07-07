@@ -1,9 +1,13 @@
 import { Icon } from "components/atoms/Icon/Icon";
 import styled from "styled-components";
+import { layout, LayoutProps } from "styled-system";
 
-const Wrapper = styled.section`
+const Wrapper = styled.aside`
+  width: 100%;
   text-align: center;
   color: #272727;
+
+  ${layout}
 
   h2 {
     font-family: "Open Sans";
@@ -25,13 +29,18 @@ const Wrapper = styled.section`
   }
 `;
 
-interface PageTitleProps {
+interface PageTitleProps extends LayoutProps {
   title: string;
   description: string;
   icon: string;
 }
-export const PageTitle = ({ title, description, icon }: PageTitleProps) => (
-  <Wrapper>
+export const PageTitle = ({
+  title,
+  description,
+  icon,
+  ...rest
+}: PageTitleProps) => (
+  <Wrapper {...rest}>
     <Icon src={icon} />
     <h2>{title}</h2>
     <p>{description}</p>
