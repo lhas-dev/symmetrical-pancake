@@ -26,7 +26,7 @@ const Wrapper = styled.main`
 `;
 
 const InnerContainer = styled.div`
-width: 100%;
+  width: 100%;
   align-self: flex-start;
 `;
 
@@ -48,20 +48,24 @@ export const Address = () => {
             icon="QuestionIcon"
           />
           <InnerContainer>
-              <Card mt={[24, 24, 0]} mb={16}>
-                <CardBody>
-                  <TextField
-                    label="Informe um CEP"
-                    placeholder="Digite aqui"
-                    icon="SearchIcon"
-                  />
-                </CardBody>
-                <CardDivider />
-                <CardBody>
-                  <Button label="Adicionar manualmente" icon="AddMoreIcon" />
-                </CardBody>
-              </Card>
-              <Checkbox label="Aceito compartilhar meu endereço com empresas parceiras" value={agreement} onChange={handleCheckbox} />
+            <Card mt={[24, 24, 0]} mb={16}>
+              <CardBody>
+                <TextField
+                  label="Informe um CEP"
+                  placeholder="Digite aqui"
+                  icon="SearchIcon"
+                />
+              </CardBody>
+              <CardDivider />
+              <CardBody>
+                <Button label="Adicionar manualmente" icon="AddMoreIcon" />
+              </CardBody>
+            </Card>
+            <Checkbox
+              label="Aceito compartilhar meu endereço com empresas parceiras"
+              value={agreement}
+              onChange={handleCheckbox}
+            />
           </InnerContainer>
         </Container>
       </Wrapper>

@@ -31,7 +31,7 @@ const Wrapper = styled.header`
     margin-right: auto;
   }
 
-  @media (min-width: 992px) {
+  @media (min-width: 52em) {
     background: #f5f5f5;
   }
 `;
