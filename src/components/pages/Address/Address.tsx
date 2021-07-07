@@ -5,7 +5,7 @@ import { Container } from "components/atoms/Container/Container";
 import { PageTitle } from "components/molecules/PageTitle/PageTitle";
 import { TextField } from "components/molecules/TextField/TextField";
 import { Header } from "components/organisms/Header/Header";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { SelectField } from "components/molecules/SelectField/SelectField";
 import ZipcodeService from "services/ZipcodeService";
@@ -66,6 +66,7 @@ export const Address = () => {
     uf: "",
     localidade: "",
   });
+  const zipcodeRef = useRef<HTMLInputElement>();
 
   // Select fields
   const [states, setStates] = useState([]);
@@ -80,10 +81,12 @@ export const Address = () => {
   const handleCheckbox = () => {
     setAgreement(!agreement);
   };
+
   const handleAddMore = () => {
     setAddManually(true);
     setDisplayFields(true);
   };
+
   const handleCEP = (event: any) => {
     const value = event.target.value;
     const isValid = value.length === CEP_LENGTH;
@@ -93,6 +96,31 @@ export const Address = () => {
     }
 
     setZipcode(value);
+  };
+
+  const handleCancel = () => {
+    setDisplayFields(false);
+    setAddManually(false);
+    setAgreement(false);
+    setZipcode("");
+    setShowZipcodeWarning(false);
+    setZipcodeData({
+      logradouro: "",
+      bairro: "",
+      uf: "",
+      localidade: "",
+    });
+    setCities([]);
+    setState("");
+    setCity("");
+    setAddress("");
+    setNeighbourhood("");
+
+    const zipcodeElement = zipcodeRef.current;
+
+    if (zipcodeElement) {
+      zipcodeElement.value = "";
+    }
   };
 
   useEffect(() => {
@@ -197,6 +225,7 @@ export const Address = () => {
                   icon="SearchIcon"
                   onChange={handleCEP}
                   mask="99999-999"
+                  innerRef={zipcodeRef}
                   error={
                     showZipcodeWarning
                       ? "CEP inválido. Por favor, verifique."
@@ -258,7 +287,7 @@ export const Address = () => {
             />
             <ButtonGroup>
               <ContainedButton label="Salvar" variant="primary" />
-              <ContainedButton label="Cancelar" />
+              <ContainedButton label="Cancelar" onClick={handleCancel} />
             </ButtonGroup>
           </InnerContainer>
         </Container>

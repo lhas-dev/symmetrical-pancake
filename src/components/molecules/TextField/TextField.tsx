@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Icon } from "components/atoms/Icon/Icon";
 import styled, { css } from "styled-components";
 import InputMask from "react-input-mask";
@@ -96,6 +96,7 @@ interface TextFieldProps extends React.HTMLProps<HTMLInputElement> {
   loading?: boolean;
   error?: string;
   mask?: string;
+  innerRef?: any;
 }
 
 export const TextField = ({
@@ -107,6 +108,7 @@ export const TextField = ({
   error,
   mask,
   value,
+  innerRef,
   onFocus,
   onBlur,
   onChange,
@@ -148,6 +150,7 @@ export const TextField = ({
           type={type}
           onChange={handleChange}
           value={value}
+          ref={innerRef}
           {...maskProps}
         />
         {icon && !loading && <Icon src={icon} />}
