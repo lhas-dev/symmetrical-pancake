@@ -104,8 +104,10 @@ export const SelectField = ({
   loading,
   error,
   options,
+  value,
   onFocus,
   onBlur,
+  onChange,
 }: SelectFieldProps) => {
   const [focused, setFocused] = useState(false);
 
@@ -125,6 +127,13 @@ export const SelectField = ({
     }
   };
 
+  const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+
+    if (onChange) {
+      onChange(event);
+    }
+  };
+
   return (
     <Wrapper>
       <SelectFieldWrapper focused={focused}>
@@ -132,7 +141,9 @@ export const SelectField = ({
         <select
           onFocus={handleFocus}
           onBlur={handleBlur}
+          onChange={handleChange}
           placeholder={placeholder}
+          value={value}
         >
           {options.map(({ value, label }) => (
             <option key={value} value={value}>

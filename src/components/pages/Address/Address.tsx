@@ -9,6 +9,7 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { SelectField } from "components/molecules/SelectField/SelectField";
 import ZipcodeService from "services/ZipcodeService";
+import StatesService from "services/StatesService";
 
 const Wrapper = styled.main`
   background: #f5f5f5;
@@ -46,9 +47,18 @@ export const Address = () => {
   // Zipcode
   const [zipcode, setZipcode] = useState("");
   const [showZipcodeWarning, setShowZipcodeWarning] = useState(false);
-  const [zipcodeData, setZipcodeData] = useState({});
+  const [zipcodeData, setZipcodeData] = useState({
+    logradouro: "",
+    bairro: "",
+    uf: "",
+  });
+
+  // Select fields
+  const [states, setStates] = useState([]);
+  const [cities, setCities] = useState([]);
 
   // Address fields
+  const [state, setState] = useState("");
   const [address, setAddress] = useState("");
   const [neighbourhood, setNeighbourhood] = useState("");
 
@@ -72,6 +82,7 @@ export const Address = () => {
 
   useEffect(() => {
     const isValid = zipcode.length === CEP_LENGTH;
+
     const cb = async () => {
       setLoading(true);
       const data = await ZipcodeService.get(zipcode);
@@ -79,11 +90,11 @@ export const Address = () => {
       setLoading(false);
       setShowZipcodeWarning(data.erro ? true : false);
 
-      if (!data.erro) {
-        setZipcodeData(data);
-        setAddress(data.logradouro);
-        setNeighbourhood(data.bairro);
+      if (data.erro) {
+        return false;
       }
+
+      setZipcodeData(data);
     };
 
     if (isValid) {
@@ -92,6 +103,34 @@ export const Address = () => {
       cb();
     }
   }, [zipcode]);
+
+  useEffect(() => {
+    const { logradouro, bairro, uf } = zipcodeData;
+
+    if (!zipcodeData.logradouro) {
+      return;
+    }
+
+    setAddress(logradouro);
+    setNeighbourhood(bairro);
+    setState(uf);
+  }, [zipcodeData, states]);
+
+  useEffect(() => {
+    const cb = async () => {
+      const ufsData = await StatesService.getAll();
+      const formattedStates = ufsData.map((uf: any) => ({
+        id: uf.id,
+        label: uf.nome,
+        value: uf.sigla,
+      }));
+      console.log(ufsData);
+
+      setStates(formattedStates);
+    };
+
+    cb();
+  }, []);
 
   return (
     <>
@@ -122,8 +161,13 @@ export const Address = () => {
                 />
                 {displayFields && (
                   <>
-                    <SelectField label="Estado" options={[]} />
-                    <SelectField label="Cidade" options={[]} />
+                    <SelectField
+                      label="Estado"
+                      options={states}
+                      value={state}
+                      onChange={(event) => setState(event.currentTarget.value)}
+                    />
+                    <SelectField label="Cidade" options={cities} />
                     <TextField
                       label="Bairro"
                       placeholder="Digite aqui"
