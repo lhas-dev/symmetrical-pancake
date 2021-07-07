@@ -1,5 +1,7 @@
+import { Address } from "components/pages/Address/Address";
+
 function App() {
-  return <div className="App">app</div>;
+  return <Address />;
 }
 
 export default App;

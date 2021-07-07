@@ -8,7 +8,7 @@ export default {
   argTypes: {},
 } as ComponentMeta<typeof NotificationButton>;
 
-const Template: ComponentStory<typeof NotificationButton> = (args) => (
+const Template: ComponentStory<typeof NotificationButton> = (args: any) => (
   <NotificationButton {...args} />
 );
 

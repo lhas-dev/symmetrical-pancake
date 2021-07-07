@@ -8,7 +8,7 @@ export default {
   argTypes: {},
 } as ComponentMeta<typeof LogoutButton>;
 
-const Template: ComponentStory<typeof LogoutButton> = (args) => (
+const Template: ComponentStory<typeof LogoutButton> = (args: any) => (
   <LogoutButton {...args} />
 );
 

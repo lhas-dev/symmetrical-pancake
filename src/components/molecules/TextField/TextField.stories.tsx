@@ -6,12 +6,12 @@ export default {
   title: "Storybook/Molecules/TextField",
   component: TextField,
   argTypes: {
-    label: "text",
-    placeholder: "text",
-    type: "text",
-    icon: "text",
-    loading: "boolean",
-    error: "text",
+    label: { control: "text" },
+    placeholder: { control: "text" },
+    type: { control: "text" },
+    icon: { control: "text" },
+    loading: { control: "boolean" },
+    error: { control: "text" },
   },
 } as ComponentMeta<typeof TextField>;
 

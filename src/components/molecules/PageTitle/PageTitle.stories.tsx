@@ -6,13 +6,13 @@ export default {
   title: "Storybook/Molecules/PageTitle",
   component: PageTitle,
   argTypes: {
-    title: "text",
-    description: "text",
-    icon: "text",
+    title: { control: "text" },
+    description: { control: "text" },
+    icon: { control: "text" },
   },
 } as ComponentMeta<typeof PageTitle>;
 
-const Template: ComponentStory<typeof PageTitle> = (args) => (
+const Template: ComponentStory<typeof PageTitle> = (args: any) => (
   <PageTitle {...args} />
 );
 

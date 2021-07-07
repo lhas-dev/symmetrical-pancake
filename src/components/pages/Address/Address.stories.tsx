@@ -8,7 +8,7 @@ export default {
   argTypes: {},
 } as ComponentMeta<typeof Address>;
 
-const Template: ComponentStory<typeof Address> = (args) => (
+const Template: ComponentStory<typeof Address> = (args: any) => (
   <Address {...args} />
 );
 
