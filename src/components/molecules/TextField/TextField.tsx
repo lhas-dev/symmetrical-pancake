@@ -1,9 +1,11 @@
 import { useState } from "react";
 import { Icon } from "components/atoms/Icon/Icon";
 import styled, { css } from "styled-components";
+import LoadingIcon from "icons/LoadingIcon.gif";
 
 interface WrapperProps {
   focused?: boolean;
+  loading?: boolean;
 }
 
 const Wrapper = styled.div<WrapperProps>`
@@ -39,7 +41,8 @@ const Wrapper = styled.div<WrapperProps>`
     position: absolute;
     right: 14px;
     top: 50%;
-    margin-top: -10px;
+    margin-top: -6px;
+    height: 21px;
   }
 
   input {
@@ -70,6 +73,7 @@ interface TextFieldProps {
   placeholder?: string;
   type?: string;
   icon?: string;
+  loading?: boolean;
 }
 
 export const TextField = ({
@@ -77,6 +81,7 @@ export const TextField = ({
   placeholder,
   type = "text",
   icon,
+  loading,
 }: TextFieldProps) => {
   const [focused, setFocused] = useState(false);
 
@@ -89,7 +94,7 @@ export const TextField = ({
   };
 
   return (
-    <Wrapper focused={focused}>
+    <Wrapper focused={focused} loading={loading}>
       {label && <label>{label}</label>}
       <input
         onFocus={handleFocus}
@@ -97,7 +102,8 @@ export const TextField = ({
         placeholder={placeholder}
         type={type}
       />
-      {icon && <Icon src={icon} />}
+      {icon && !loading && <Icon src={icon} />}
+      {loading && <img alt="Loading" className="loading" src={LoadingIcon} />}
     </Wrapper>
   );
 };

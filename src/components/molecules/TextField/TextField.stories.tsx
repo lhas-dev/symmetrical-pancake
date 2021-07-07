@@ -10,6 +10,7 @@ export default {
     placeholder: "text",
     type: "text",
     icon: "text",
+    loading: "boolean",
   },
 } as ComponentMeta<typeof TextField>;
 
@@ -23,4 +24,5 @@ Default.args = {
   placeholder: "Digite aqui",
   type: "text",
   icon: "SearchIcon",
+  loading: false,
 };
