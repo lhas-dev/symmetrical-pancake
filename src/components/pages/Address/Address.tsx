@@ -40,6 +40,7 @@ const ButtonGroup = styled.div`
   flex-wrap: wrap;
   gap: 16px;
   margin-top: 32px;
+  margin-bottom: 32px;
 
   button {
     width: auto;
@@ -77,6 +78,8 @@ export const Address = () => {
   const [city, setCity] = useState("");
   const [address, setAddress] = useState("");
   const [neighbourhood, setNeighbourhood] = useState("");
+  const [number, setNumber] = useState("");
+  const [complement, setComplement] = useState("");
 
   const handleCheckbox = () => {
     setAgreement(!agreement);
@@ -124,7 +127,7 @@ export const Address = () => {
   };
 
   useEffect(() => {
-    const isValid = zipcode.length === CEP_LENGTH;
+    const isValid = zipcode.length === CEP_LENGTH && !addManually;
 
     const cb = async () => {
       setLoading(true);
@@ -144,7 +147,7 @@ export const Address = () => {
 
       cb();
     }
-  }, [zipcode]);
+  }, [zipcode, addManually]);
 
   useEffect(() => {
     const { logradouro, bairro, uf } = zipcodeData;
@@ -204,6 +207,9 @@ export const Address = () => {
     cb();
   }, [state, states, zipcodeData.localidade]);
 
+  const isFormValid =
+    zipcode.length === 9 && state && city && address && number;
+
   return (
     <>
       <Header />
@@ -262,8 +268,16 @@ export const Address = () => {
                         setAddress(event.currentTarget.value)
                       }
                     />
-                    <TextField label="Número" placeholder="Digite aqui" />
-                    <TextField label="Complemento" placeholder="Digite aqui" />
+                    <TextField label="Número" placeholder="Digite aqui"
+                      value={number}
+                      onChange={(event) =>
+                        setNumber(event.currentTarget.value)
+                      } />
+                    <TextField label="Complemento" placeholder="Digite aqui" 
+                      value={complement}
+                      onChange={(event) =>
+                        setComplement(event.currentTarget.value)
+                      } />
                   </>
                 )}
               </CardBody>
@@ -286,7 +300,11 @@ export const Address = () => {
               onChange={handleCheckbox}
             />
             <ButtonGroup>
-              <ContainedButton label="Salvar" variant="primary" />
+              <ContainedButton
+                label="Salvar"
+                variant="primary"
+                disabled={!isFormValid}
+              />
               <ContainedButton label="Cancelar" onClick={handleCancel} />
             </ButtonGroup>
           </InnerContainer>
