@@ -5,7 +5,7 @@ import {
   CardDivider,
   Wrapper as CardWrapper,
 } from "components/atoms/Card/Card";
-import { Checkbox } from "components/atoms/Checkbox/Checkbox";
+import { Checkbox } from "components/molecules/Checkbox/Checkbox";
 import { Container } from "components/atoms/Container/Container";
 import { PageTitle } from "components/molecules/PageTitle/PageTitle";
 import { TextField } from "components/molecules/TextField/TextField";

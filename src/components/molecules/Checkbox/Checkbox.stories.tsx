@@ -2,7 +2,7 @@ import { ComponentStory, ComponentMeta } from "@storybook/react";
 import { Checkbox } from "./Checkbox";
 
 export default {
-  title: "Storybook/Atoms/Checkbox",
+  title: "Storybook/Molecules/Checkbox",
   component: Checkbox,
   argTypes: {
     value: { control: "boolean" },
