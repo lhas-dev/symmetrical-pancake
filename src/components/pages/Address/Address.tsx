@@ -5,7 +5,7 @@ import { Container } from "components/atoms/Container/Container";
 import { PageTitle } from "components/molecules/PageTitle/PageTitle";
 import { TextField } from "components/molecules/TextField/TextField";
 import { Header } from "components/organisms/Header/Header";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { SelectField } from "components/molecules/SelectField/SelectField";
 
@@ -31,10 +31,13 @@ const InnerContainer = styled.div`
   align-self: flex-start;
 `;
 
+const CEP_LENGTH = 9;
+
 export const Address = () => {
   const [displayFields, setDisplayFields] = useState(false);
   const [addManually, setAddManually] = useState(false);
   const [agreement, setAgreement] = useState(false);
+  const [zipcode, setZipcode] = useState("");
 
   const handleCheckbox = () => {
     setAgreement(!agreement);
@@ -45,15 +48,23 @@ export const Address = () => {
   };
   const handleCEP = (event: any) => {
     const value = event.target.value;
-    const CEP_LENGTH = 9;
     const isValid = value.length === CEP_LENGTH;
 
     if (!isValid) {
       return false;
     }
 
-    console.log(value);
+    setZipcode(value);
   };
+
+  useEffect(() => {
+    const isValid = zipcode.length === CEP_LENGTH;
+
+    if (isValid) {
+      setDisplayFields(true);
+    }
+  }, [zipcode]);
+  
   return (
     <>
       <Header />
