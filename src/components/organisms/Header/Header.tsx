@@ -9,18 +9,23 @@ import { LogoutButton } from "components/molecules/Header/LogoutButton/LogoutBut
 import { UserInfos } from "components/molecules/Header/UserInfos/UserInfos";
 import { NotificationButton } from "components/molecules/Header/NotificationButton/NotificationButton";
 import { useDevice } from "hooks/useDevice";
+import { Container } from "components/atoms/Container/Container";
 
 interface HeaderProps {}
 
 const Wrapper = styled.header`
+  width: 100%;
   min-height: 56px;
   padding-left: 16px;
   padding-right: 16px;
   background: #ffffff;
   border-bottom: 1px solid #ddd;
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+
+  ${Container} {
+    align-items: center;
+    justify-content: space-between;
+  }
 
   ${BreadcrumbWrapper} {
     margin-left: 20px;
@@ -47,24 +52,24 @@ export const Header = (_props: HeaderProps) => {
 
   return (
     <Wrapper>
-      <Icon src="DashboardIcon" />
-      <Breadcrumb items={breadcrumbItems} />
-      <RightCol>
-        {device.isDesktop() && (
-          <NotificationButton />
-        )}
-        <Avatar
-          src="https://picsum.photos/200"
-          name="John Doe"
-          hasNotification
-        />
-        {device.isDesktop() && (
-          <>
-            <UserInfos name="Silvia Costa" points="4.200" />
-            <LogoutButton />
-          </>
-        )}
-      </RightCol>
+      <Container>
+        <Icon src="DashboardIcon" />
+        <Breadcrumb items={breadcrumbItems} />
+        <RightCol>
+          {device.isDesktop() && <NotificationButton />}
+          <Avatar
+            src="https://picsum.photos/200"
+            name="John Doe"
+            hasNotification
+          />
+          {device.isDesktop() && (
+            <>
+              <UserInfos name="Silvia Costa" points="4.200" />
+              <LogoutButton />
+            </>
+          )}
+        </RightCol>
+      </Container>
     </Wrapper>
   );
 };
