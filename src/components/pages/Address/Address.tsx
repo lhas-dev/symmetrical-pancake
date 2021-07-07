@@ -10,6 +10,7 @@ import styled from "styled-components";
 import { SelectField } from "components/molecules/SelectField/SelectField";
 import ZipcodeService from "services/ZipcodeService";
 import StatesService from "services/StatesService";
+import CitiesService from "services/CitiesService";
 
 const Wrapper = styled.main`
   background: #f5f5f5;
@@ -51,6 +52,7 @@ export const Address = () => {
     logradouro: "",
     bairro: "",
     uf: "",
+    localidade: "",
   });
 
   // Select fields
@@ -59,6 +61,7 @@ export const Address = () => {
 
   // Address fields
   const [state, setState] = useState("");
+  const [city, setCity] = useState("");
   const [address, setAddress] = useState("");
   const [neighbourhood, setNeighbourhood] = useState("");
 
@@ -86,7 +89,6 @@ export const Address = () => {
     const cb = async () => {
       setLoading(true);
       const data = await ZipcodeService.get(zipcode);
-      console.log(data);
       setLoading(false);
       setShowZipcodeWarning(data.erro ? true : false);
 
@@ -118,19 +120,45 @@ export const Address = () => {
 
   useEffect(() => {
     const cb = async () => {
-      const ufsData = await StatesService.getAll();
-      const formattedStates = ufsData.map((uf: any) => ({
+      const request = await StatesService.getAll();
+      const formattedStates = request.map((uf: any) => ({
         id: uf.id,
         label: uf.nome,
         value: uf.sigla,
       }));
-      console.log(ufsData);
 
       setStates(formattedStates);
     };
 
     cb();
   }, []);
+
+  useEffect(() => {
+    const cb = async () => {
+      const stateObject: any = states.find((item: any) => item.value === state);
+      const ufId = stateObject?.id;
+
+      if (!ufId || states.length === 0) {
+        return;
+      }
+
+      const request = await CitiesService.getAll(ufId);
+      const formattedCities = request.map((cidade: any) => ({
+        id: cidade.id,
+        label: cidade.nome,
+        value: cidade.id,
+      }));
+      setCities(formattedCities);
+
+      const city = request.find(
+        (item: any) => item.nome === zipcodeData.localidade
+      );
+
+      setCity(city.id);
+    };
+
+    cb();
+  }, [state, states, zipcodeData.localidade]);
 
   return (
     <>
@@ -167,7 +195,12 @@ export const Address = () => {
                       value={state}
                       onChange={(event) => setState(event.currentTarget.value)}
                     />
-                    <SelectField label="Cidade" options={cities} />
+                    <SelectField
+                      label="Cidade"
+                      options={cities}
+                      value={city}
+                      onChange={(event) => setCity(event.currentTarget.value)}
+                    />
                     <TextField
                       label="Bairro"
                       placeholder="Digite aqui"
@@ -189,7 +222,7 @@ export const Address = () => {
                   </>
                 )}
               </CardBody>
-              {!addManually && (
+              {!addManually && zipcode.length !== CEP_LENGTH && (
                 <>
                   <CardDivider />
                   <CardBody>
