@@ -1,10 +1,5 @@
 import { Button } from "components/atoms/Button/Button";
-import {
-  Card,
-  CardBody,
-  CardDivider,
-  Wrapper as CardWrapper,
-} from "components/atoms/Card/Card";
+import { Card, CardBody, CardDivider } from "components/atoms/Card/Card";
 import { Checkbox } from "components/molecules/Checkbox/Checkbox";
 import { Container } from "components/atoms/Container/Container";
 import { PageTitle } from "components/molecules/PageTitle/PageTitle";
@@ -39,7 +34,7 @@ export const Address = () => {
   const [agreement, setAgreement] = useState(false);
 
   const handleCheckbox = () => {
-    setAgreement(true);
+    setAgreement(!agreement);
   };
   return (
     <>
