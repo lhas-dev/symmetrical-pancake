@@ -13,7 +13,6 @@ const Wrapper = styled.button<ContainedButtonProps>`
   cursor: pointer;
   display: inline-flex;
   align-items: center;
-  width: 100%;
   font-family: "Open Sans", sans-serif;
   color: #00adef;
   letter-spacing: 1.5px;
@@ -26,6 +25,8 @@ const Wrapper = styled.button<ContainedButtonProps>`
   min-height: 35px;
   border-radius: 4px;
   justify-content: center;
+  padding-left: 28px;
+  padding-right: 28px;
 
   ${({ disabled }) =>
     disabled &&

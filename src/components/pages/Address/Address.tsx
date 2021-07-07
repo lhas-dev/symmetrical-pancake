@@ -11,6 +11,7 @@ import { SelectField } from "components/molecules/SelectField/SelectField";
 import ZipcodeService from "services/ZipcodeService";
 import StatesService from "services/StatesService";
 import CitiesService from "services/CitiesService";
+import { ContainedButton } from "components/atoms/ContainedButton/ContainedButton";
 
 const Wrapper = styled.main`
   background: #f5f5f5;
@@ -32,6 +33,17 @@ const Wrapper = styled.main`
 const InnerContainer = styled.div`
   width: 100%;
   align-self: flex-start;
+`;
+
+const ButtonGroup = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 32px;
+
+  button {
+    width: auto;
+  }
 `;
 
 const CEP_LENGTH = 9;
@@ -176,7 +188,7 @@ export const Address = () => {
             icon="QuestionIcon"
           />
           <InnerContainer>
-            <Card mt={[24, 24, 0]} mb={16}>
+            <Card mt={[24, 24, 0]} mb={[16, 16, 32]}>
               <CardBody display="flex" flexDirection="column" gridGap="20px">
                 <TextField
                   label="Informe um CEP"
@@ -244,6 +256,10 @@ export const Address = () => {
               value={agreement}
               onChange={handleCheckbox}
             />
+            <ButtonGroup>
+              <ContainedButton label="Salvar" variant="primary" />
+              <ContainedButton label="Cancelar" />
+            </ButtonGroup>
           </InnerContainer>
         </Container>
       </Wrapper>
