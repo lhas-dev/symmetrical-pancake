@@ -1,3 +1,4 @@
+import { Button } from "components/atoms/Button/Button";
 import { Card, CardBody, CardDivider } from "components/atoms/Card/Card";
 import { PageTitle } from "components/molecules/PageTitle/PageTitle";
 import { TextField } from "components/molecules/TextField/TextField";
@@ -31,7 +32,9 @@ export const Address = () => {
             />
           </CardBody>
           <CardDivider />
-          <CardBody>botão aqui</CardBody>
+          <CardBody>
+            <Button label="Adicionar manualmente" icon="AddMoreIcon" />
+          </CardBody>
         </Card>
       </Wrapper>
     </>

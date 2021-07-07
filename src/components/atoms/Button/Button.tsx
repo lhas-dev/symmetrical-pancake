@@ -14,6 +14,8 @@ const Wrapper = styled.button`
   text-transform: uppercase;
   font-size: 11px;
   transition: all 0.1s ease-in;
+  margin: 0;
+  padding: 0;
 
   &:hover {
     opacity: 0.5;
