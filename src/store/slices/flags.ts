@@ -1,17 +1,28 @@
 import { createSlice } from "@reduxjs/toolkit";
+import type { RootState } from "../index";
+
+interface FlagState {
+  displayFields: boolean;
+  addManually: boolean;
+  agreement: boolean;
+  [key: string]: boolean;
+}
+
+const initialState: FlagState = {
+  displayFields: false,
+  addManually: false,
+  agreement: false,
+};
 
 export const flagsSlice = createSlice({
   name: "flags",
-  initialState: {
-      displayFields: false,
-      addManually: false,
-      agreement: false,
-  },
+  initialState,
   reducers: {
-    setFlagValue: (state: any, action) => {
-        const { flag, value } = action.payload;
-        state[flag] = value;
+    setFlagValue: (state, action) => {
+      const { flag, value } = action.payload;
+      state[flag] = value;
     },
+    clear: () => initialState,
   },
 });
 

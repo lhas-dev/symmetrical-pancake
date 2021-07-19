@@ -1,28 +1,28 @@
+
 import { Button } from "components/atoms/Button/Button";
+import { ButtonGroup } from "components/atoms/ButtonGroup/ButtonGroup";
 import { Card, CardBody, CardDivider } from "components/atoms/Card/Card";
-import { Checkbox } from "components/molecules/Checkbox/Checkbox";
+import { ContainedButton } from "components/atoms/ContainedButton/ContainedButton";
 import { Container } from "components/atoms/Container/Container";
+import { Checkbox } from "components/molecules/Checkbox/Checkbox";
 import { PageTitle } from "components/molecules/PageTitle/PageTitle";
+import { SelectField } from "components/molecules/SelectField/SelectField";
 import { TextField } from "components/molecules/TextField/TextField";
 import { Header } from "components/organisms/Header/Header";
-import { useEffect, useRef, useState } from "react";
-import styled from "styled-components";
-import { SelectField } from "components/molecules/SelectField/SelectField";
-import ZipcodeService from "services/ZipcodeService";
-import StatesService from "services/StatesService";
-import CitiesService from "services/CitiesService";
-import { ContainedButton } from "components/atoms/ContainedButton/ContainedButton";
-import { SuccessStateModal } from "components/templates/SuccessStateModal/SuccessStateModal";
 import { ErrorStateModal } from "components/templates/ErrorStateModal/ErrorStateModal";
+import { SuccessStateModal } from "components/templates/SuccessStateModal/SuccessStateModal";
+import { useAppDispatch } from "hooks/useAppDispatch";
+import { useAppSelector } from "hooks/useAppSelector";
 import { usePreviousValue } from "hooks/usePreviousValue";
 import isEqual from "lodash.isequal";
 import orderBy from "lodash.orderby";
-import { ButtonGroup } from "components/atoms/ButtonGroup/ButtonGroup";
-import { useSelector, useDispatch } from 'react-redux'
-import { useAppSelector } from "hooks/useAppSelector";
-import { useAppDispatch } from "hooks/useAppDispatch";
-import { actions as loadingActions } from "store/slices/loading";
+import { useEffect, useRef, useState } from "react";
+import CitiesService from "services/CitiesService";
+import StatesService from "services/StatesService";
+import ZipcodeService from "services/ZipcodeService";
 import { actions as flagsActions } from "store/slices/flags";
+import { actions as loadingActions } from "store/slices/loading";
+import styled from "styled-components";
 
 const Wrapper = styled.main`
   background: #f5f5f5;
@@ -51,14 +51,17 @@ const InnerContainerMargin = styled.div`
 const CEP_LENGTH = 9;
 
 export const Address = () => {
-  const dispatch = useAppDispatch()
+  const dispatch = useAppDispatch();
 
   // Flags
-  const { displayFields, addManually, agreement } = useAppSelector(state => state.flags);
-  const setFlagValue = (flag: string, value: boolean) => dispatch(flagsActions.setFlagValue({ flag, value }));
+  const { displayFields, addManually, agreement } = useAppSelector(
+    (state) => state.flags
+  );
+  const setFlagValue = (flag: string, value: boolean) =>
+    dispatch(flagsActions.setFlagValue({ flag, value }));
 
   // Loading
-  const loading = useAppSelector(state => state.loading);
+  const loading = useAppSelector((state) => state.loading);
   const showLoading = () => dispatch(loadingActions.show());
   const hideLoading = () => dispatch(loadingActions.hide());
 
@@ -79,12 +82,18 @@ export const Address = () => {
   const [cities, setCities] = useState([]);
 
   // Address fields
-  const [state, setState] = useState("");
-  const [city, setCity] = useState("");
-  const [address, setAddress] = useState("");
-  const [neighbourhood, setNeighbourhood] = useState("");
-  const [number, setNumber] = useState("");
-  const [complement, setComplement] = useState("");
+  // const {
+  //   state,
+  //   city,
+  //   address,
+  //   neighbourhood,
+  //   number,
+  //   complement,
+  // } = useAppSelector((state) => state.form);
+  // const setFormValue = (field: string, value: string) =>
+  //   dispatch(formActions.setFormValue({ field, value }));
+  // const setFormValues = (payload: Partial<FormState>) =>
+  //   dispatch(formActions.setFormValues(payload));
 
   // Modal
   const [showModal, setShowModal] = useState(false);
@@ -111,9 +120,6 @@ export const Address = () => {
   };
 
   const handleCancel = () => {
-    setFlagValue("displayFields", false);
-    setFlagValue("addManually", false);
-    setFlagValue("agreement", false);
     setZipcode("");
     setShowZipcodeWarning(false);
     setZipcodeData({
@@ -123,10 +129,8 @@ export const Address = () => {
       localidade: "",
     });
     setCities([]);
-    setState("");
-    setCity("");
-    setAddress("");
-    setNeighbourhood("");
+    dispatch(flagsActions.clear());
+    // dispatch(formActions.clear());
 
     const zipcodeElement = zipcodeRef.current;
 
@@ -165,9 +169,11 @@ export const Address = () => {
       return;
     }
 
-    setAddress(logradouro);
-    setNeighbourhood(bairro);
-    setState(uf);
+    // setFormValues({
+    //   address: logradouro,
+    //   neighbourhood: bairro,
+    //   state: uf,
+    // });
   }, [zipcodeData, states]);
 
   useEffect(() => {
@@ -188,41 +194,41 @@ export const Address = () => {
 
   useEffect(() => {
     const cb = async () => {
-      
-      const stateObject: any = states.find((item: any) => item.value === state);
-      const ufId = stateObject?.id;
-      const isNotValid = !isEqual(previousZipcodeData, zipcodeData) || !ufId || states.length === 0;
+      // const stateObject: any = states.find((item: any) => item.value === state);
+      // const ufId = stateObject?.id;
+      // const isNotValid =
+      //   !isEqual(previousZipcodeData, zipcodeData) ||
+      //   !ufId ||
+      //   states.length === 0;
 
-      if (isNotValid) {
-        return;
-      }
+      // if (isNotValid) {
+      //   return;
+      // }
 
-      const request = await CitiesService.getAll(ufId);
-      const formattedCities = request.map((cidade: any) => ({
-        id: cidade.id,
-        label: cidade.nome,
-        value: cidade.id,
-      }));
-      setCities(formattedCities);
+      // const request = await CitiesService.getAll(ufId);
+      // const formattedCities = request.map((cidade: any) => ({
+      //   id: cidade.id,
+      //   label: cidade.nome,
+      //   value: cidade.id,
+      // }));
+      // setCities(formattedCities);
 
+      // const city = request.find(
+      //   (item: any) => item.nome === zipcodeData.localidade
+      // );
 
-      const city = request.find(
-        (item: any) => item.nome === zipcodeData.localidade
-      );
-    
+      // if (!city) {
+      //   return;
+      // }
 
-      if (!city) {
-        return;
-      }
-
-      setCity(city.id);
+      // setFormValue("city", city.id);
     };
 
     cb();
-  }, [previousZipcodeData, state, states, zipcodeData]);
+  }, [previousZipcodeData, states, zipcodeData]);
 
   const isFormValid =
-    zipcode.length === 9 && state && city && address && number;
+    zipcode.length === 9;
 
   const handleSubmit = () => {
     setShowModal(true);
@@ -273,26 +279,26 @@ export const Address = () => {
                   />
                   {displayFields && (
                     <>
-                      <SelectField
+                      {/* <SelectField
                         label="Estado"
                         options={states}
                         value={state}
                         onChange={(event) =>
-                          setState(event.currentTarget.value)
+                          setFormValue("state", event.currentTarget.value)
                         }
                       />
                       <SelectField
                         label="Cidade"
                         options={cities}
                         value={city}
-                        onChange={(event) => setCity(event.currentTarget.value)}
+                        onChange={(event) => setFormValue("city", event.currentTarget.value)}
                       />
                       <TextField
                         label="Bairro"
                         placeholder="Digite aqui"
                         value={neighbourhood}
                         onChange={(event) =>
-                          setNeighbourhood(event.currentTarget.value)
+                          setFormValue("neighbourhood", event.currentTarget.value)
                         }
                       />
                       <TextField
@@ -300,7 +306,7 @@ export const Address = () => {
                         placeholder="Digite aqui"
                         value={address}
                         onChange={(event) =>
-                          setAddress(event.currentTarget.value)
+                          setFormValue("address", event.currentTarget.value)
                         }
                       />
                       <TextField
@@ -308,7 +314,7 @@ export const Address = () => {
                         placeholder="Digite aqui"
                         value={number}
                         onChange={(event) =>
-                          setNumber(event.currentTarget.value)
+                          setFormValue("number", event.currentTarget.value)
                         }
                       />
                       <TextField
@@ -316,9 +322,9 @@ export const Address = () => {
                         placeholder="Digite aqui"
                         value={complement}
                         onChange={(event) =>
-                          setComplement(event.currentTarget.value)
+                          setFormValue("complement", event.currentTarget.value)
                         }
-                      />
+                      /> */}
                     </>
                   )}
                 </CardBody>
