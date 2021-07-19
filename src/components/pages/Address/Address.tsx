@@ -22,6 +22,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { useAppSelector } from "hooks/useAppSelector";
 import { useAppDispatch } from "hooks/useAppDispatch";
 import { actions as loadingActions } from "store/slices/loading";
+import { actions as flagsActions } from "store/slices/flags";
 
 const Wrapper = styled.main`
   background: #f5f5f5;
@@ -51,12 +52,10 @@ const CEP_LENGTH = 9;
 
 export const Address = () => {
   const dispatch = useAppDispatch()
-  
 
   // Flags
-  const [displayFields, setDisplayFields] = useState(false);
-  const [addManually, setAddManually] = useState(false);
-  const [agreement, setAgreement] = useState(false);
+  const { displayFields, addManually, agreement } = useAppSelector(state => state.flags);
+  const setFlagValue = (flag: string, value: boolean) => dispatch(flagsActions.setFlagValue({ flag, value }));
 
   // Loading
   const loading = useAppSelector(state => state.loading);
@@ -92,12 +91,12 @@ export const Address = () => {
   const [modalState, setModalState] = useState("");
 
   const handleCheckbox = () => {
-    setAgreement(!agreement);
+    setFlagValue("agreement", !agreement);
   };
 
   const handleAddMore = () => {
-    setAddManually(true);
-    setDisplayFields(true);
+    setFlagValue("addManually", true);
+    setFlagValue("displayFields", true);
   };
 
   const handleCEP = (event: any) => {
@@ -112,9 +111,9 @@ export const Address = () => {
   };
 
   const handleCancel = () => {
-    setDisplayFields(false);
-    setAddManually(false);
-    setAgreement(false);
+    setFlagValue("displayFields", false);
+    setFlagValue("addManually", false);
+    setFlagValue("agreement", false);
     setZipcode("");
     setShowZipcodeWarning(false);
     setZipcodeData({
@@ -153,7 +152,7 @@ export const Address = () => {
     };
 
     if (isValid) {
-      setDisplayFields(true);
+      setFlagValue("displayFields", true);
 
       cb();
     }
