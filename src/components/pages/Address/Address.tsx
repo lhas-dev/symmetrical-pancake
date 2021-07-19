@@ -18,6 +18,10 @@ import { usePreviousValue } from "hooks/usePreviousValue";
 import isEqual from "lodash.isequal";
 import orderBy from "lodash.orderby";
 import { ButtonGroup } from "components/atoms/ButtonGroup/ButtonGroup";
+import { useSelector, useDispatch } from 'react-redux'
+import { useAppSelector } from "hooks/useAppSelector";
+import { useAppDispatch } from "hooks/useAppDispatch";
+import { actions as loadingActions } from "store/slices/loading";
 
 const Wrapper = styled.main`
   background: #f5f5f5;
@@ -46,13 +50,18 @@ const InnerContainerMargin = styled.div`
 const CEP_LENGTH = 9;
 
 export const Address = () => {
+  const dispatch = useAppDispatch()
+  
+
   // Flags
   const [displayFields, setDisplayFields] = useState(false);
   const [addManually, setAddManually] = useState(false);
   const [agreement, setAgreement] = useState(false);
 
   // Loading
-  const [loading, setLoading] = useState(false);
+  const loading = useAppSelector(state => state.loading);
+  const showLoading = () => dispatch(loadingActions.show());
+  const hideLoading = () => dispatch(loadingActions.hide());
 
   // Zipcode
   const [zipcode, setZipcode] = useState("");
@@ -131,9 +140,9 @@ export const Address = () => {
     const isValid = zipcode.length === CEP_LENGTH && !addManually;
 
     const cb = async () => {
-      setLoading(true);
+      showLoading();
       const data = await ZipcodeService.get(zipcode);
-      setLoading(false);
+      hideLoading();
       setShowZipcodeWarning(data.erro ? true : false);
 
       if (data.erro) {
