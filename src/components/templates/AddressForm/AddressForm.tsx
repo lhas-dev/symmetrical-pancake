@@ -17,6 +17,7 @@ import StatesService from "services/StatesService";
 import ZipcodeService from "services/ZipcodeService";
 import { actions as flagsActions } from "store/slices/flags";
 import { actions as loadingActions } from "store/slices/loading";
+import { actions as locationsActions } from "store/slices/locations";
 import styled from "styled-components";
 
 const InnerContainer = styled.div`
@@ -33,8 +34,6 @@ const CEP_LENGTH = 9;
 export const AddressForm = ({ onSubmit, form }: any) => {
   const { batch, change } = form;
 
-  const [states, setStates] = useState([]);
-  const [cities, setCities] = useState([]);
   const [zipcode, setZipcode] = useState("");
   const [hasError, setHasError] = useState(false);
 
@@ -42,6 +41,7 @@ export const AddressForm = ({ onSubmit, form }: any) => {
   const isFormValid = zipcode.length === 9;
 
   const dispatch = useAppDispatch();
+  const { states, cities } = useAppSelector((state) => state.locations);
   const loading = useAppSelector((state) => state.loading);
   const { displayFields, addManually, agreement } = useAppSelector(
     (state) => state.flags
@@ -74,7 +74,9 @@ export const AddressForm = ({ onSubmit, form }: any) => {
   const handleCancel = () => {
     setZipcode("");
     setHasError(false);
-    setCities([]);
+    dispatch(
+      locationsActions.setLocationValue({ location: "cities", value: [] })
+    );
     dispatch(flagsActions.clear());
     form.reset();
 
@@ -101,16 +103,18 @@ export const AddressForm = ({ onSubmit, form }: any) => {
       const uf: any = states.find((item: any) => item.value === data.uf);
 
       const citiesRequest = await CitiesService.getAll(uf.id);
-      const citiesResponse = citiesRequest.map((cidade: any) => ({
+      const value = citiesRequest.map((cidade: any) => ({
         id: cidade.id,
         label: cidade.nome,
         value: cidade.id,
       }));
-      const city = citiesResponse.find(
-        (item: {label: string;}) => item.label === data.localidade
+      const city = value.find(
+        (item: { label: string }) => item.label === data.localidade
       );
 
-      setCities(citiesResponse);
+      dispatch(
+        locationsActions.setLocationValue({ location: "cities", value })
+      );
 
       batch(() => {
         change("address", data.logradouro);
@@ -125,8 +129,8 @@ export const AddressForm = ({ onSubmit, form }: any) => {
 
   const onDidMount = async () => {
     const request = await StatesService.getAll();
-    const response: any = orderBy(
-      request.map((uf: { id: number; nome: string; sigla: string;}) => ({
+    const value: any = orderBy(
+      request.map((uf: { id: number; nome: string; sigla: string }) => ({
         id: uf.id,
         label: uf.nome,
         value: uf.sigla,
@@ -135,7 +139,7 @@ export const AddressForm = ({ onSubmit, form }: any) => {
       ["asc"]
     );
 
-    setStates(response);
+    dispatch(locationsActions.setLocationValue({ location: "states", value }));
   };
 
   useEffect(() => {
@@ -163,9 +167,7 @@ export const AddressForm = ({ onSubmit, form }: any) => {
                   onChange={handleZipcode}
                   mask="99999-999"
                   innerRef={zipcodeRef}
-                  error={
-                    hasError ? "CEP inválido. Por favor, verifique." : ""
-                  }
+                  error={hasError ? "CEP inválido. Por favor, verifique." : ""}
                 />
                 {displayFields && (
                   <>
