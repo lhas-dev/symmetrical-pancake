@@ -10,7 +10,7 @@ import { TextField } from "components/molecules/TextField/TextField";
 import { useAppDispatch } from "hooks/useAppDispatch";
 import { useAppSelector } from "hooks/useAppSelector";
 import orderBy from "lodash.orderby";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Field } from "react-final-form";
 import CitiesService from "services/CitiesService";
 import StatesService from "services/StatesService";
@@ -31,9 +31,9 @@ const InnerContainerMargin = styled.div`
 const CEP_LENGTH = 9;
 
 export const AddressForm = ({ onSubmit, form }: any) => {
+  const { batch, change } = form;
   const dispatch = useAppDispatch();
-
-  // Flags
+  const loading = useAppSelector((state) => state.loading);
   const { displayFields, addManually, agreement } = useAppSelector(
     (state) => state.flags
   );
@@ -45,17 +45,8 @@ export const AddressForm = ({ onSubmit, form }: any) => {
   const [cities, setCities] = useState([]);
 
   // Loading
-  const loading = useAppSelector((state) => state.loading);
-  const showLoading = () => dispatch(loadingActions.show());
-  const hideLoading = () => dispatch(loadingActions.hide());
 
   const [zipcode, setZipcode] = useState("");
-  const [zipcodeData, setZipcodeData] = useState({
-    logradouro: "",
-    bairro: "",
-    uf: "",
-    localidade: "",
-  });
   const [showZipcodeWarning, setShowZipcodeWarning] = useState(false);
   const zipcodeRef = useRef<HTMLInputElement>();
 
@@ -85,14 +76,9 @@ export const AddressForm = ({ onSubmit, form }: any) => {
   const handleCancel = () => {
     setZipcode("");
     setShowZipcodeWarning(false);
-    setZipcodeData({
-      logradouro: "",
-      bairro: "",
-      uf: "",
-      localidade: "",
-    });
     setCities([]);
     dispatch(flagsActions.clear());
+    form.reset();
 
     const zipcodeElement = zipcodeRef.current;
 
@@ -101,14 +87,13 @@ export const AddressForm = ({ onSubmit, form }: any) => {
     }
   };
 
-
   useEffect(() => {
     if (!zipcode) return;
 
     const cb = async () => {
-      showLoading();
+      dispatch(loadingActions.show());
       const data = await ZipcodeService.get(zipcode);
-      hideLoading();
+      dispatch(loadingActions.hide());
       setShowZipcodeWarning(data.erro ? true : false);
 
       if (data.erro || addManually) {
@@ -124,36 +109,39 @@ export const AddressForm = ({ onSubmit, form }: any) => {
         value: cidade.id,
       }));
       const city = citiesResponse.find(
-          (item: any) => item.label === data.localidade
-        );
+        (item: any) => item.label === data.localidade
+      );
 
       setCities(citiesResponse);
 
-      form.batch(() => {
-        form.change("address", data.logradouro);
-        form.change("neighbourhood", data.bairro);
-        form.change("state", data.uf);
-        form.change("city", city.id);
+      batch(() => {
+        change("address", data.logradouro);
+        change("neighbourhood", data.bairro);
+        change("state", data.uf);
+        change("city", city.id);
       });
     };
 
     cb();
-  }, [zipcode, addManually]);
+  }, [zipcode, dispatch, addManually, states, batch, change]);
 
-
-  useEffect(() => {
-    const cb = async () => {
-      const request = await StatesService.getAll();
-      const response: any = orderBy(request.map((uf: any) => ({
+  const onDidMount = async () => {
+    const request = await StatesService.getAll();
+    const response: any = orderBy(
+      request.map((uf: any) => ({
         id: uf.id,
         label: uf.nome,
         value: uf.sigla,
-      })), ["label"], ["asc"]);
+      })),
+      ["label"],
+      ["asc"]
+    );
 
-      setStates(response);
-    };
+    setStates(response);
+  };
 
-    cb();
+  useEffect(() => {
+    onDidMount();
   }, []);
 
   return (
