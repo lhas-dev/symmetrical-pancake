@@ -10,7 +10,7 @@ import { TextField } from "components/molecules/TextField/TextField";
 import { useAppDispatch } from "hooks/useAppDispatch";
 import { useAppSelector } from "hooks/useAppSelector";
 import orderBy from "lodash.orderby";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Field } from "react-final-form";
 import CitiesService from "services/CitiesService";
 import StatesService from "services/StatesService";
@@ -32,27 +32,25 @@ const CEP_LENGTH = 9;
 
 export const AddressForm = ({ onSubmit, form }: any) => {
   const { batch, change } = form;
+
+  const [states, setStates] = useState([]);
+  const [cities, setCities] = useState([]);
+  const [zipcode, setZipcode] = useState("");
+  const [hasError, setHasError] = useState(false);
+
+  const zipcodeRef = useRef<HTMLInputElement>();
+  const isFormValid = zipcode.length === 9;
+
   const dispatch = useAppDispatch();
   const loading = useAppSelector((state) => state.loading);
   const { displayFields, addManually, agreement } = useAppSelector(
     (state) => state.flags
   );
+
   const setFlagValue = (flag: string, value: boolean) =>
     dispatch(flagsActions.setFlagValue({ flag, value }));
 
-  // Select fields
-  const [states, setStates] = useState([]);
-  const [cities, setCities] = useState([]);
-
-  // Loading
-
-  const [zipcode, setZipcode] = useState("");
-  const [showZipcodeWarning, setShowZipcodeWarning] = useState(false);
-  const zipcodeRef = useRef<HTMLInputElement>();
-
-  const isFormValid = zipcode.length === 9;
-
-  const handleCEP = (event: any) => {
+  const handleZipcode = (event: any) => {
     const value = event.target.value;
     const isValid = value.length === CEP_LENGTH;
 
@@ -75,7 +73,7 @@ export const AddressForm = ({ onSubmit, form }: any) => {
 
   const handleCancel = () => {
     setZipcode("");
-    setShowZipcodeWarning(false);
+    setHasError(false);
     setCities([]);
     dispatch(flagsActions.clear());
     form.reset();
@@ -94,7 +92,7 @@ export const AddressForm = ({ onSubmit, form }: any) => {
       dispatch(loadingActions.show());
       const data = await ZipcodeService.get(zipcode);
       dispatch(loadingActions.hide());
-      setShowZipcodeWarning(data.erro ? true : false);
+      setHasError(data.erro ? true : false);
 
       if (data.erro || addManually) {
         return false;
@@ -109,7 +107,7 @@ export const AddressForm = ({ onSubmit, form }: any) => {
         value: cidade.id,
       }));
       const city = citiesResponse.find(
-        (item: any) => item.label === data.localidade
+        (item: {label: string;}) => item.label === data.localidade
       );
 
       setCities(citiesResponse);
@@ -128,7 +126,7 @@ export const AddressForm = ({ onSubmit, form }: any) => {
   const onDidMount = async () => {
     const request = await StatesService.getAll();
     const response: any = orderBy(
-      request.map((uf: any) => ({
+      request.map((uf: { id: number; nome: string; sigla: string;}) => ({
         id: uf.id,
         label: uf.nome,
         value: uf.sigla,
@@ -162,13 +160,11 @@ export const AddressForm = ({ onSubmit, form }: any) => {
                   label="Informe um CEP"
                   loading={loading}
                   icon="SearchIcon"
-                  onChange={handleCEP}
+                  onChange={handleZipcode}
                   mask="99999-999"
                   innerRef={zipcodeRef}
                   error={
-                    showZipcodeWarning
-                      ? "CEP inválido. Por favor, verifique."
-                      : ""
+                    hasError ? "CEP inválido. Por favor, verifique." : ""
                   }
                 />
                 {displayFields && (
