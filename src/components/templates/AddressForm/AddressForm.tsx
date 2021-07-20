@@ -10,6 +10,7 @@ import { TextField } from "components/molecules/TextField/TextField";
 import { useAppDispatch } from "hooks/useAppDispatch";
 import { useAppSelector } from "hooks/useAppSelector";
 import { useStates } from "hooks/useStates";
+import { useZipcode } from "hooks/useZipcode";
 import { useEffect, useRef, useState } from "react";
 import { Field } from "react-final-form";
 import CitiesService from "services/CitiesService";
@@ -34,9 +35,9 @@ export const AddressForm = ({ onSubmit, form }: any) => {
   const { batch, change } = form;
 
   useStates();
+  const { fetchZipcode, hasError, setHasError } = useZipcode();
 
   const [zipcode, setZipcode] = useState("");
-  const [hasError, setHasError] = useState(false);
 
   const zipcodeRef = useRef<HTMLInputElement>();
   const isFormValid = zipcode.length === 9;
@@ -92,15 +93,7 @@ export const AddressForm = ({ onSubmit, form }: any) => {
     if (!zipcode) return;
 
     const cb = async () => {
-      dispatch(loadingActions.show());
-      const data = await ZipcodeService.get(zipcode);
-      dispatch(loadingActions.hide());
-      setHasError(data.erro ? true : false);
-
-      if (data.erro || addManually) {
-        return false;
-      }
-
+      const data = await fetchZipcode(zipcode);
       const uf: any = states.find((item: any) => item.value === data.uf);
 
       const citiesRequest = await CitiesService.getAll(uf.id);
