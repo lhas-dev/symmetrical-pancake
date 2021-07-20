@@ -9,14 +9,12 @@ import { SelectField } from "components/molecules/SelectField/SelectField";
 import { TextField } from "components/molecules/TextField/TextField";
 import { useAppDispatch } from "hooks/useAppDispatch";
 import { useAppSelector } from "hooks/useAppSelector";
+import { useCities } from "hooks/useCities";
 import { useStates } from "hooks/useStates";
 import { useZipcode } from "hooks/useZipcode";
 import { useEffect, useRef, useState } from "react";
 import { Field } from "react-final-form";
-import CitiesService from "services/CitiesService";
-import ZipcodeService from "services/ZipcodeService";
 import { actions as flagsActions } from "store/slices/flags";
-import { actions as loadingActions } from "store/slices/loading";
 import { actions as locationsActions } from "store/slices/locations";
 import styled from "styled-components";
 
@@ -33,14 +31,14 @@ const CEP_LENGTH = 9;
 
 export const AddressForm = ({ onSubmit, form }: any) => {
   const { batch, change } = form;
-
-  useStates();
   const { fetchZipcode, hasError, setHasError } = useZipcode();
-
+  const { fetchCities } = useCities();
   const [zipcode, setZipcode] = useState("");
 
   const zipcodeRef = useRef<HTMLInputElement>();
   const isFormValid = zipcode.length === 9;
+
+  useStates();
 
   const dispatch = useAppDispatch();
   const { states, cities } = useAppSelector((state) => state.locations);
@@ -82,10 +80,8 @@ export const AddressForm = ({ onSubmit, form }: any) => {
     dispatch(flagsActions.clear());
     form.reset();
 
-    const zipcodeElement = zipcodeRef.current;
-
-    if (zipcodeElement) {
-      zipcodeElement.value = "";
+    if (zipcodeRef.current) {
+      zipcodeRef.current.value = "";
     }
   };
 
@@ -94,21 +90,8 @@ export const AddressForm = ({ onSubmit, form }: any) => {
 
     const cb = async () => {
       const data = await fetchZipcode(zipcode);
-      const uf: any = states.find((item: any) => item.value === data.uf);
-
-      const citiesRequest = await CitiesService.getAll(uf.id);
-      const value = citiesRequest.map((cidade: any) => ({
-        id: cidade.id,
-        label: cidade.nome,
-        value: cidade.id,
-      }));
-      const city = value.find(
-        (item: { label: string }) => item.label === data.localidade
-      );
-
-      dispatch(
-        locationsActions.setLocationValue({ location: "cities", value })
-      );
+      const uf = states.find((item: any) => item.value === data.uf);
+      const city = await fetchCities(uf, data);
 
       batch(() => {
         change("address", data.logradouro);
@@ -119,7 +102,7 @@ export const AddressForm = ({ onSubmit, form }: any) => {
     };
 
     cb();
-  }, [zipcode, dispatch, addManually, states, batch, change]);
+  }, [zipcode, states, batch, change, fetchCities, fetchZipcode]);
 
   return (
     <form onSubmit={onSubmit}>

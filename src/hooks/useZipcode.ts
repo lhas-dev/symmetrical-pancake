@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import ZipcodeService from "services/ZipcodeService";
 import { actions as loadingActions } from "store/slices/loading";
 import { useAppDispatch } from "./useAppDispatch";
@@ -9,7 +9,7 @@ export const useZipcode = () => {
   const { addManually } = useAppSelector((state) => state.flags);
   const dispatch = useAppDispatch();
 
-  const fetchZipcode = async (zipcode: string) => {
+  const fetchZipcode = useCallback(async (zipcode: string) => {
     dispatch(loadingActions.show());
     const data = await ZipcodeService.get(zipcode);
     dispatch(loadingActions.hide());
@@ -20,7 +20,7 @@ export const useZipcode = () => {
     }
 
     return data;
-  };
+  }, [addManually, dispatch]);
 
   return {
     hasError,
