@@ -1,11 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit";
 import loadingReducer from "./slices/loading";
 import flagsReducer from "./slices/flags";
+import modalReducer from "./slices/modal";
 
 const store = configureStore({
   reducer: {
     loading: loadingReducer,
     flags: flagsReducer,
+    modal: modalReducer,
   },
 });
 

@@ -1,13 +1,14 @@
 import { Container } from "components/atoms/Container/Container";
-import { AddressForm } from "components/organisms/AddressForm";
+import { AddressForm } from "components/templates/AddressForm/AddressForm";
 import { Header } from "components/organisms/Header/Header";
 import { ErrorStateModal } from "components/templates/ErrorStateModal/ErrorStateModal";
 import { SuccessStateModal } from "components/templates/SuccessStateModal/SuccessStateModal";
-import { useAppDispatch } from "hooks/useAppDispatch";
 import { useAppSelector } from "hooks/useAppSelector";
 import { useState } from "react";
 import { Form } from "react-final-form";
 import styled from "styled-components";
+import { useAppDispatch } from "hooks/useAppDispatch";
+import { actions as modalActions } from "store/slices/modal";
 
 const Wrapper = styled.main`
   background: #f5f5f5;
@@ -25,30 +26,27 @@ const Wrapper = styled.main`
 `;
 
 export const Address = () => {
-  const { agreement } = useAppSelector((state) => state.flags);
-
-  // Modal
-  const [showModal, setShowModal] = useState(false);
-  const [modalState, setModalState] = useState("");
+  const dispatch = useAppDispatch();
+  const flags = useAppSelector((state) => state.flags);
+  const modal = useAppSelector((state) => state.modal);
 
   const onSubmit = () => {
-    setShowModal(true);
-    setModalState(agreement ? "success" : "error");
+    dispatch(modalActions.show(flags.agreement ? "success" : "error"));
   };
 
   const handleModalClose = () => {
-    setShowModal(false);
+    dispatch(modalActions.hide());
   };
 
   return (
     <>
       <Header />
       <SuccessStateModal
-        visible={showModal && modalState === "success"}
+        visible={modal.visible && modal.kind === "success"}
         onClose={handleModalClose}
       />
       <ErrorStateModal
-        visible={showModal && modalState === "error"}
+        visible={modal.visible && modal.kind === "error"}
         onClose={handleModalClose}
       />
       <Wrapper>
