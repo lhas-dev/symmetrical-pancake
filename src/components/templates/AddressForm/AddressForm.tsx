@@ -9,11 +9,10 @@ import { SelectField } from "components/molecules/SelectField/SelectField";
 import { TextField } from "components/molecules/TextField/TextField";
 import { useAppDispatch } from "hooks/useAppDispatch";
 import { useAppSelector } from "hooks/useAppSelector";
-import orderBy from "lodash.orderby";
+import { useStates } from "hooks/useStates";
 import { useEffect, useRef, useState } from "react";
 import { Field } from "react-final-form";
 import CitiesService from "services/CitiesService";
-import StatesService from "services/StatesService";
 import ZipcodeService from "services/ZipcodeService";
 import { actions as flagsActions } from "store/slices/flags";
 import { actions as loadingActions } from "store/slices/loading";
@@ -33,6 +32,8 @@ const CEP_LENGTH = 9;
 
 export const AddressForm = ({ onSubmit, form }: any) => {
   const { batch, change } = form;
+
+  useStates();
 
   const [zipcode, setZipcode] = useState("");
   const [hasError, setHasError] = useState(false);
@@ -126,25 +127,6 @@ export const AddressForm = ({ onSubmit, form }: any) => {
 
     cb();
   }, [zipcode, dispatch, addManually, states, batch, change]);
-
-  const onDidMount = async () => {
-    const request = await StatesService.getAll();
-    const value: any = orderBy(
-      request.map((uf: { id: number; nome: string; sigla: string }) => ({
-        id: uf.id,
-        label: uf.nome,
-        value: uf.sigla,
-      })),
-      ["label"],
-      ["asc"]
-    );
-
-    dispatch(locationsActions.setLocationValue({ location: "states", value }));
-  };
-
-  useEffect(() => {
-    onDidMount();
-  }, []);
 
   return (
     <form onSubmit={onSubmit}>
