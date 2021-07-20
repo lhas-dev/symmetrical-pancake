@@ -101,7 +101,7 @@ interface TextFieldProps extends React.HTMLProps<HTMLInputElement> {
 
 export const TextField = ({
   label,
-  placeholder,
+  placeholder = "Digite aqui",
   type = "text",
   icon,
   loading,
