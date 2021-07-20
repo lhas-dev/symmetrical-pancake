@@ -7,15 +7,16 @@ import { Checkbox } from "components/molecules/Checkbox/Checkbox";
 import { PageTitle } from "components/molecules/PageTitle/PageTitle";
 import { SelectField } from "components/molecules/SelectField/SelectField";
 import { TextField } from "components/molecules/TextField/TextField";
-import { useAppDispatch } from "hooks/useAppDispatch";
-import { useAppSelector } from "hooks/useAppSelector";
-import { useCities } from "hooks/useCities";
-import { useStates } from "hooks/useStates";
-import { useZipcode } from "hooks/useZipcode";
+import {
+  useAppDispatch,
+  useAppSelector,
+  useCities,
+  useZipcode,
+  useStates,
+} from "hooks";
 import { useEffect, useRef, useState } from "react";
 import { Field } from "react-final-form";
-import { actions as flagsActions } from "store/slices/flags";
-import { actions as locationsActions } from "store/slices/locations";
+import { actions } from "store/slices";
 import styled from "styled-components";
 
 const InnerContainer = styled.div`
@@ -48,7 +49,7 @@ export const AddressForm = ({ onSubmit, form }: any) => {
   );
 
   const setFlagValue = (flag: string, value: boolean) =>
-    dispatch(flagsActions.setFlagValue({ flag, value }));
+    dispatch(actions.flags.setFlagValue({ flag, value }));
 
   const handleZipcode = (event: any) => {
     const value = event.target.value;
@@ -75,9 +76,9 @@ export const AddressForm = ({ onSubmit, form }: any) => {
     setZipcode("");
     setHasError(false);
     dispatch(
-      locationsActions.setLocationValue({ location: "cities", value: [] })
+      actions.locations.setLocationValue({ location: "cities", value: [] })
     );
-    dispatch(flagsActions.clear());
+    dispatch(actions.flags.clear());
     form.reset();
 
     if (zipcodeRef.current) {

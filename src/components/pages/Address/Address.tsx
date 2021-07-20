@@ -4,11 +4,10 @@ import { Header } from "components/organisms/Header/Header";
 import { ErrorStateModal } from "components/templates/ErrorStateModal/ErrorStateModal";
 import { SuccessStateModal } from "components/templates/SuccessStateModal/SuccessStateModal";
 import { useAppSelector } from "hooks/useAppSelector";
-import { useState } from "react";
 import { Form } from "react-final-form";
 import styled from "styled-components";
 import { useAppDispatch } from "hooks/useAppDispatch";
-import { actions as modalActions } from "store/slices/modal";
+import { actions } from "store/slices";
 
 const Wrapper = styled.main`
   background: #f5f5f5;
@@ -31,11 +30,11 @@ export const Address = () => {
   const modal = useAppSelector((state) => state.modal);
 
   const onSubmit = () => {
-    dispatch(modalActions.show(flags.agreement ? "success" : "error"));
+    dispatch(actions.modal.show(flags.agreement ? "success" : "error"));
   };
 
   const handleModalClose = () => {
-    dispatch(modalActions.hide());
+    dispatch(actions.modal.hide());
   };
 
   return (

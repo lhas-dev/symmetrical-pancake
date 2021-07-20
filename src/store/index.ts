@@ -1,16 +1,8 @@
 import { configureStore } from "@reduxjs/toolkit";
-import loadingReducer from "./slices/loading";
-import flagsReducer from "./slices/flags";
-import modalReducer from "./slices/modal";
-import locationsReducer from "./slices/locations";
+import { reducers } from "./slices";
 
 const store = configureStore({
-  reducer: {
-    loading: loadingReducer,
-    flags: flagsReducer,
-    modal: modalReducer,
-    locations: locationsReducer,
-  },
+  reducer: reducers,
 });
 
 export default store;
