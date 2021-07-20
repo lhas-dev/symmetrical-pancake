@@ -25,9 +25,6 @@ const Wrapper = styled.main`
 `;
 
 export const Address = () => {
-  const dispatch = useAppDispatch();
-
-  // Flags
   const { agreement } = useAppSelector((state) => state.flags);
 
   // Modal
@@ -62,7 +59,6 @@ export const Address = () => {
           )}
         />
       </Wrapper>
-      . ;33
     </>
   );
 };

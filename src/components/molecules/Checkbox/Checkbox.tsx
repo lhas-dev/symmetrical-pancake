@@ -42,7 +42,7 @@ interface CheckboxProps {
 }
 
 export const Checkbox = ({ label, value, onChange }: CheckboxProps) => (
-  <Wrapper onClick={onChange}>
+  <Wrapper type="button" onClick={onChange}>
     <Square>{value && <Icon src="TickIcon" />}</Square>
     {label && <Label>{label}</Label>}
   </Wrapper>
