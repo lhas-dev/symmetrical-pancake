@@ -12,12 +12,11 @@ import {
   useAppSelector,
   useCities,
   useZipcode,
-  useStates,
 } from "hooks";
 import { useEffect, useRef, useState } from "react";
-import { Field } from "react-final-form";
 import { actions } from "store/slices";
 import styled from "styled-components";
+import { useForm, Controller } from "react-hook-form";
 
 const InnerContainer = styled.div`
   width: 100%;
@@ -30,17 +29,24 @@ const InnerContainerMargin = styled.div`
 
 const CEP_LENGTH = 9;
 
-export const AddressForm = ({ onSubmit, form }: any) => {
-  const { batch, change } = form;
+export const AddressForm = () => {
+  // Hooks
+  const {
+    control,
+    watch,
+    handleSubmit,
+    setValue,
+    reset
+  } = useForm();
   const { fetchZipcode, hasError, setHasError } = useZipcode();
   const { fetchCities } = useCities();
+
+  // States
   const [zipcode, setZipcode] = useState("");
+  const [isValid, setIsValid] = useState(false);
+  const watchAllFields = watch();
 
-  const zipcodeRef = useRef<HTMLInputElement>();
-  const isFormValid = zipcode.length === 9;
-
-  useStates();
-
+  // Store
   const dispatch = useAppDispatch();
   const { states, cities } = useAppSelector((state) => state.locations);
   const loading = useAppSelector((state) => state.loading);
@@ -48,10 +54,15 @@ export const AddressForm = ({ onSubmit, form }: any) => {
     (state) => state.flags
   );
 
+  // Refs
+  const zipcodeRef = useRef<any>();
+
+
+  // Events
   const setFlagValue = (flag: string, value: boolean) =>
     dispatch(actions.flags.setFlagValue({ flag, value }));
 
-  const handleZipcode = (event: any) => {
+  const handleZipcodeChange = (event: any) => {
     const value = event.target.value;
     const isValid = value.length === CEP_LENGTH;
 
@@ -67,26 +78,33 @@ export const AddressForm = ({ onSubmit, form }: any) => {
     setFlagValue("agreement", !agreement);
   };
 
-  const handleAddMore = () => {
+  const handleAddManually = () => {
     setFlagValue("addManually", true);
     setFlagValue("displayFields", true);
   };
 
-  const handleCancel = () => {
+  // Form submission
+  const onSubmit = () => {
+    dispatch(actions.modal.show(agreement ? "success" : "error"));
+  };
+  
+  // Form cancel
+  const onCancel = () => {
     setZipcode("");
     setHasError(false);
     dispatch(
       actions.locations.setLocationValue({ location: "cities", value: [] })
     );
     dispatch(actions.flags.clear());
-    form.reset();
+    reset();
 
     if (zipcodeRef.current) {
       zipcodeRef.current.value = "";
     }
   };
 
-  useEffect(() => {
+  // When zipcode is updated
+  const handleZipcodeUpdate = () => {
     if (!zipcode) return;
 
     const cb = async () => {
@@ -94,19 +112,28 @@ export const AddressForm = ({ onSubmit, form }: any) => {
       const uf = states.find((item: any) => item.value === data.uf);
       const city = await fetchCities(uf, data);
 
-      batch(() => {
-        change("address", data.logradouro);
-        change("neighbourhood", data.bairro);
-        change("state", data.uf);
-        change("city", city.id);
-      });
+      setValue("address", data.logradouro);
+      setValue("neighbourhood", data.bairro);
+      setValue("state", data.uf);
+      setValue("city", city.id);
     };
 
     cb();
-  }, [zipcode, states, batch, change, fetchCities, fetchZipcode]);
+  }
+  useEffect(handleZipcodeUpdate, [zipcode, states, fetchCities, fetchZipcode, setValue]);
+
+  // Validation
+  const handleValidation = () => {
+    const { address, number, neighbourhood, city, state } = watchAllFields;
+    const isValid = address && number && neighbourhood && city && state && zipcode.length === CEP_LENGTH;
+
+    setIsValid(isValid);
+  }
+
+  useEffect(handleValidation, [watchAllFields, zipcode]);
 
   return (
-    <form onSubmit={onSubmit}>
+    <form onSubmit={handleSubmit(onSubmit)}>
       <Container>
         <PageTitle
           mt={[null, null, 40]}
@@ -123,57 +150,67 @@ export const AddressForm = ({ onSubmit, form }: any) => {
                   label="Informe um CEP"
                   loading={loading}
                   icon="SearchIcon"
-                  onChange={handleZipcode}
+                  onChange={handleZipcodeChange}
                   mask="99999-999"
-                  innerRef={zipcodeRef}
+                  ref={zipcodeRef}
                   error={hasError ? "CEP inválido. Por favor, verifique." : ""}
                 />
                 {displayFields && (
                   <>
-                    <Field
+                    <Controller
                       name="state"
-                      render={({ input }) => (
+                      control={control}
+                      render={({ field }) => (
                         <SelectField
                           label="Estado (UF)"
                           options={states}
-                          {...input}
+                          {...field}
                         />
                       )}
                     />
-                    <Field
+                    <Controller
                       name="city"
-                      render={({ input }) => (
+                      control={control}
+                      render={({ field }) => (
                         <SelectField
                           label="Cidade"
                           options={cities}
-                          {...input}
+                          {...field}
                         />
                       )}
                     />
-                    <Field
+                    <Controller
                       name="neighbourhood"
-                      render={({ input }) => (
-                        <TextField label="Bairro" {...input} />
-                      )}
+                      control={control}
+                      defaultValue=""
+                      render={({ field }) => (<TextField label="Bairro" {...field} />)}
                     />
-                    <Field
-                      name="address"
-                      render={({ input }) => (
-                        <TextField label="Rua / Avenida" {...input} />
-                      )}
-                    />
-                    <Field
-                      name="number"
-                      render={({ input }) => (
-                        <TextField label="Número" {...input} />
-                      )}
-                    />
-                    <Field
-                      name="complement"
-                      render={({ input }) => (
-                        <TextField label="Complemento" {...input} />
-                      )}
-                    />
+                    
+                  <Controller
+                    name="address"
+                    control={control}
+                    defaultValue=""
+                    render={({ field }) => (
+                      <TextField label="Rua / Avenida" {...field} />
+                    )}
+                  />
+                  <Controller
+                    name="number"
+                    control={control}
+                    defaultValue=""
+                    rules={{ required: true }}
+                    render={({ field }) => (
+                      <TextField label="Número" {...field} />
+                    )}
+                  />
+                    <Controller
+                    name="complement"
+                    defaultValue=""
+                    control={control}
+                    render={({ field }) => (
+                      <TextField label="Complemento" {...field} />
+                    )}
+                  />
                   </>
                 )}
               </CardBody>
@@ -184,7 +221,7 @@ export const AddressForm = ({ onSubmit, form }: any) => {
                     <Button
                       label="Adicionar manualmente"
                       icon="AddMoreIcon"
-                      onClick={handleAddMore}
+                      onClick={handleAddManually}
                     />
                   </CardBody>
                 </>
@@ -200,10 +237,10 @@ export const AddressForm = ({ onSubmit, form }: any) => {
             <ContainedButton
               label="Salvar"
               variant="primary"
-              disabled={!isFormValid}
-              onClick={onSubmit}
+              disabled={!isValid}
+              type="submit"
             />
-            <ContainedButton label="Cancelar" onClick={handleCancel} />
+            <ContainedButton label="Cancelar" onClick={onCancel} />
           </ButtonGroup>
         </InnerContainer>
       </Container>

@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Icon } from "components/atoms/Icon/Icon";
 import styled, { css } from "styled-components";
 import LoadingIcon from "icons/LoadingIcon.gif";
+import React from "react";
 
 interface SelectFieldWrapperProps {
   focused?: boolean;
@@ -94,10 +95,11 @@ interface SelectFieldProps extends React.HTMLProps<HTMLSelectElement> {
   icon?: string;
   loading?: boolean;
   error?: string;
+  ref: any;
   options: { label: string | number; value: string | number }[];
 }
 
-export const SelectField = ({
+export const SelectField = React.forwardRef<HTMLSelectElement, SelectFieldProps>(({
   label,
   placeholder,
   icon = "ArrowDownIcon",
@@ -108,7 +110,7 @@ export const SelectField = ({
   onFocus,
   onBlur,
   onChange,
-}: SelectFieldProps) => {
+}, ref) => {
   const [focused, setFocused] = useState(false);
 
   const handleFocus = (event: React.FocusEvent<HTMLSelectElement>) => {
@@ -144,6 +146,7 @@ export const SelectField = ({
           onChange={handleChange}
           placeholder={placeholder}
           value={value}
+          ref={ref}
         >
           {options.map(({ value, label }) => (
             <option key={value} value={value}>
@@ -162,4 +165,4 @@ export const SelectField = ({
       )}
     </Wrapper>
   );
-};
+});

@@ -4,10 +4,10 @@ import { Header } from "components/organisms/Header/Header";
 import { ErrorStateModal } from "components/templates/ErrorStateModal/ErrorStateModal";
 import { SuccessStateModal } from "components/templates/SuccessStateModal/SuccessStateModal";
 import { useAppSelector } from "hooks/useAppSelector";
-import { Form } from "react-final-form";
 import styled from "styled-components";
 import { useAppDispatch } from "hooks/useAppDispatch";
 import { actions } from "store/slices";
+import { useStates } from "hooks";
 
 const Wrapper = styled.main`
   background: #f5f5f5;
@@ -25,13 +25,9 @@ const Wrapper = styled.main`
 `;
 
 export const Address = () => {
+  useStates();
   const dispatch = useAppDispatch();
-  const flags = useAppSelector((state) => state.flags);
   const modal = useAppSelector((state) => state.modal);
-
-  const onSubmit = () => {
-    dispatch(actions.modal.show(flags.agreement ? "success" : "error"));
-  };
 
   const handleModalClose = () => {
     dispatch(actions.modal.hide());
@@ -49,12 +45,7 @@ export const Address = () => {
         onClose={handleModalClose}
       />
       <Wrapper>
-        <Form
-          onSubmit={onSubmit}
-          render={({ handleSubmit, form }) => (
-            <AddressForm onSubmit={handleSubmit} form={form} />
-          )}
-        />
+        <AddressForm />
       </Wrapper>
     </>
   );
