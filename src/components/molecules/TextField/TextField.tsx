@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { Icon } from "components/atoms/Icon/Icon";
 import styled, { css } from "styled-components";
 import InputMask from "react-input-mask";
@@ -96,23 +96,22 @@ interface TextFieldProps extends React.HTMLProps<HTMLInputElement> {
   loading?: boolean;
   error?: string;
   mask?: string;
-  innerRef?: any;
+  ref?: any;
 }
 
-export const TextField = ({
+export const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(({
   label,
-  placeholder,
+  placeholder = "Digite aqui",
   type = "text",
   icon,
   loading,
   error,
   mask,
   value,
-  innerRef,
   onFocus,
   onBlur,
   onChange,
-}: TextFieldProps) => {
+}, ref) => {
   const [focused, setFocused] = useState(false);
   const Element = mask ? InputMask : "input";
   const maskProps = mask ? { mask, maskPlaceholder: null } : { mask: "" };
@@ -150,7 +149,7 @@ export const TextField = ({
           type={type}
           onChange={handleChange}
           value={value}
-          ref={innerRef}
+          ref={ref}
           {...maskProps}
         />
         {icon && !loading && <Icon src={icon} />}
@@ -164,4 +163,4 @@ export const TextField = ({
       )}
     </Wrapper>
   );
-};
+});

@@ -4,6 +4,7 @@ import { Icon } from "../Icon/Icon";
 interface ContainedButtonProps extends React.HTMLProps<HTMLButtonElement> {
   label?: string;
   icon?: string;
+  type?: "button" | "submit" | "reset" | undefined;
   variant?: "primary" | "secondary";
 }
 
@@ -66,12 +67,13 @@ const Wrapper = styled.button<ContainedButtonProps>`
 export const ContainedButton = ({
   label,
   icon,
+  type = "button",
   variant = "secondary",
   disabled = false,
   onClick,
 }: ContainedButtonProps) => {
   return (
-    <Wrapper onClick={onClick} variant={variant} disabled={disabled}>
+    <Wrapper type={type} onClick={onClick} variant={variant} disabled={disabled}>
       {icon && <Icon src={icon} />}
       {label}
     </Wrapper>
